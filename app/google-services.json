@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "733056341617",
+    "firebase_url": "https://wednesday-9229f.firebaseio.com",
+    "project_id": "wednesday-9229f",
+    "storage_bucket": "wednesday-9229f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:733056341617:android:895daefa80b19f61",
+        "android_client_info": {
+          "package_name": "com.example.android.wednesday"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "733056341617-2dm35ptc5rocsacappvmtbj8c05vks30.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.android.wednesday",
+            "certificate_hash": "F9882D98033AEDE4F571BE221C79652A61C3CD67"
+          }
+        },
+        {
+          "client_id": "733056341617-96d9mq49od23iah1ijoe18r2ov5p65dq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzZ5yfhJDsY-YfvfQGFeWxjfbn243xSy8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "733056341617-96d9mq49od23iah1ijoe18r2ov5p65dq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
