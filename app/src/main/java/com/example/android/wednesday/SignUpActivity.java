@@ -1,5 +1,6 @@
 package com.example.android.wednesday;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,12 +11,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.android.wednesday.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,28 +31,47 @@ public class SignUpActivity extends AppCompatActivity {
 
     private static final String TAG = "Login";
 
+
+    @BindView(R.id.name)
+    EditText nameField;
     @BindView(R.id.email)
     EditText emailField;
     @BindView(R.id.password)
     EditText passwordField;
+    @BindView(R.id.confirmPassword)
+    EditText confirmPasswordField;
     @BindView(R.id.email_sign_in_button)
     Button signInButton;
 
+
     private FirebaseAuth mAuth;
+    private FirebaseDatabase mdatabase;
+    private DatabaseReference mDatabaseReference;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
+
+        mAuth = FirebaseAuth.getInstance();
+        mdatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
+
+
+
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!passwordField.getText().toString().equals(confirmPasswordField.getText().toString()) ){
+                    confirmPasswordField.setError("Passwords do not match");
+                    return;
+                }
                 createAccount(emailField.getText().toString(), passwordField.getText().toString());
             }
         });
-        mAuth = FirebaseAuth.getInstance();
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -85,6 +108,14 @@ public class SignUpActivity extends AppCompatActivity {
     private void createAccount(String email, String password) {
         Log.d(TAG, "createAccount:" + email);
 
+        if(CredentialHelper.checkIfEmpty(nameField, this)){
+            return;
+        }
+
+        if(CredentialHelper.checkIfEmpty(confirmPasswordField, this)){
+            return;
+        }
+
         if(CredentialHelper.checkIfEmpty(emailField, this) || CredentialHelper.checkIfEmpty(passwordField, this)){
             return;
         }
@@ -114,11 +145,29 @@ public class SignUpActivity extends AppCompatActivity {
                         }
                         else{
                             mAuth.getCurrentUser().sendEmailVerification();
+                            addUserProfileInfo(task.getResult().getUser());
+                            callMainActivity();
+
                         }
 
 //                        hideProgressDialog();
                     }
                 });
+    }
+
+    public void addUserProfileInfo(FirebaseUser registeredUser){
+        String name = nameField.getText().toString();
+        String email = registeredUser.getEmail();
+        String userId = registeredUser.getUid();
+        User user = new User(name, email);
+        mDatabaseReference.child("users").child(userId).setValue(user);
+
+
+    }
+
+    public void callMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 
