@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.BindView;
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
     private static final String TAG = "Login";
 
@@ -83,6 +84,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void createAccount(String email, String password) {
         Log.d(TAG, "createAccount:" + email);
+
+        if(CredentialHelper.checkIfEmpty(emailField, this) || CredentialHelper.checkIfEmpty(passwordField, this)){
+            return;
+        }
+
         if (!(CredentialHelper.checkPasswordValid(passwordField, this) && CredentialHelper.isEmailValid(emailField.getText().toString()))) {
             return;
         }
@@ -97,8 +103,17 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
 
                         if (!task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "Auth failed",
-                                    Toast.LENGTH_SHORT).show();
+
+                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                Toast.makeText(SignUpActivity.this, "User with this email already exist.", Toast.LENGTH_SHORT).show();
+                            }
+
+                            else{
+                                Toast.makeText(getApplicationContext(), "Auth failed", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        else{
+                            mAuth.getCurrentUser().sendEmailVerification();
                         }
 
 //                        hideProgressDialog();
