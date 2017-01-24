@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A login screen that offers login via email/password.
@@ -167,6 +168,12 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void callMainActivity(){
         Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.loginOption)
+    public void gotoLogin(){
+        Intent intent  = new Intent(getApplicationContext(), LogInActivity.class);
         startActivity(intent);
     }
 
