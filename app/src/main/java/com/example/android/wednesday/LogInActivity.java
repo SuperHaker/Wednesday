@@ -11,6 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -83,9 +85,28 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.signupOption)
-    public void signUpbuttonclicked(){
+    public void signUpButtonclicked(){
         Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
         startActivity(intent);
+    }
+
+    @OnClick(R.id.forgotPassword)
+    public void resetPassword(){
+        mAuth.sendPasswordResetEmail(loginEmail.getText().toString())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 }
 
