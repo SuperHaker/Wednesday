@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.wednesday.R;
+import com.github.demono.AutoScrollViewPager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,7 +61,24 @@ public class TabOneFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab_one, container, false);
+        View rootView =  inflater.inflate(R.layout.fragment_tab_one, container, false);
+        AutoScrollViewPager mViewPager = (AutoScrollViewPager) rootView.findViewById(R.id.viewPager);
+        mViewPager.startAutoScroll();
+
+        //For Dynamic addition
+
+//        LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.linear);
+//        for (int i = 0; i < 10; i++) {
+//            ImageView imageView = new ImageView(getContext());
+//            imageView.setId(i);
+//            imageView.setPadding(2, 2, 2, 2);
+//            imageView.setImageBitmap(BitmapFactory.decodeResource(
+//                    getResources(), R.mipmap.ic_launcher));
+//            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+//            layout.addView(imageView);
+//
+//        }
+        return rootView;
     }
 
 }
