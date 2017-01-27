@@ -1,13 +1,16 @@
-<ScrollView android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:scrollbars="none">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="none"
+    android:paddingBottom="50dp">
+
 
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context="com.example.android.wednesday.fragments.TabOneFragment">
 
@@ -15,24 +18,56 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="Featured Events"
+      android:layout_gravity="center"
+      android:textSize="20sp"
       android:textColor="#000"
       android:layout_margin="10dp"/>
 
-    <include layout="@layout/image_list"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/featured_picks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:scrollbars="none"
+        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Top Picks"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:textColor="#000"
+        android:layout_margin="10dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/top_picks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:scrollbars="none"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Categories"
+        android:layout_gravity="center"
+        android:textSize="20sp"
         android:textColor="#000"
         android:layout_margin="10dp"/>
 
 
-    <include layout="@layout/image_list"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/categories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:scrollbars="none"
+        android:layout_marginRight="10dp"
 
-
-
-
+        />
 
 
 

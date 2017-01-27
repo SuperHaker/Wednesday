@@ -18,11 +18,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
-//    private MyPagerAdapter adapter;
-//    private Drawable oldBackground = null;
-//    private int currentColor;
-//    private SystemBarTintManager mTintManager;
-
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -83,4 +78,6 @@ public class MainActivity extends AppCompatActivity {
             return mFragmentTitleList.get(position);
         }
     }
+
+
 }
