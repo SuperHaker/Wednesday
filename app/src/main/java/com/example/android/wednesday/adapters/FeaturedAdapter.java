@@ -41,9 +41,6 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.Featur
     }
 
 
-
-
-
     @Override
     public void onBindViewHolder(FeaturedViewHolder holder, int position) {
 

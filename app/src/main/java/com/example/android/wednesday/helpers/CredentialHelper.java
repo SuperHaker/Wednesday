@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class CredentialHelper {
 
-    private static Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,64}$");
+    private static Pattern PASSWORD_PATTERN = Pattern.compile("^[a-zA-Z]\\w{3,14}$"); //^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,64}$
 
     public static boolean isEmailValid(String email) {
         email = email.trim();

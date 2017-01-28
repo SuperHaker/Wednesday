@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,8 @@ public class LogInActivity extends AppCompatActivity {
     Button loginButton;
     @BindView(R.id.signupOption)
     TextView signupOption;
+    @BindView(R.id.login_progress)
+    ProgressBar loginProgress;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -85,6 +89,7 @@ public class LogInActivity extends AppCompatActivity {
             return;
         }
 
+        loginProgress.setVisibility(View.VISIBLE);
         mAuth.signInWithEmailAndPassword(email,password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -100,6 +105,7 @@ public class LogInActivity extends AppCompatActivity {
 
                         }
 
+                        loginProgress.setVisibility(View.INVISIBLE);
                     }
                 });
 

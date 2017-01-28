@@ -8,10 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.android.wednesday.helpers.CredentialHelper;
 import com.example.android.wednesday.R;
+import com.example.android.wednesday.helpers.CredentialHelper;
 import com.example.android.wednesday.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -44,6 +45,10 @@ public class SignUpActivity extends AppCompatActivity {
     EditText confirmPasswordField;
     @BindView(R.id.email_sign_in_button)
     Button signInButton;
+    @BindView(R.id.signup_progress)
+    ProgressBar progressBar;
+
+
 
 
     private FirebaseAuth mAuth;
@@ -67,10 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!passwordField.getText().toString().equals(confirmPasswordField.getText().toString()) ){
-                    confirmPasswordField.setError("Passwords do not match");
-                    return;
-                }
+
                 createAccount(emailField.getText().toString(), passwordField.getText().toString());
             }
         });
@@ -114,11 +116,16 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        if(CredentialHelper.checkIfEmpty(confirmPasswordField, this)){
+        if(CredentialHelper.checkIfEmpty(emailField, this)){
             return;
         }
 
-        if(CredentialHelper.checkIfEmpty(emailField, this) || CredentialHelper.checkIfEmpty(passwordField, this)){
+        if(CredentialHelper.checkIfEmpty(passwordField, this)){
+            return;
+        }
+
+
+        if(CredentialHelper.checkIfEmpty(confirmPasswordField, this)){
             return;
         }
 
@@ -126,9 +133,14 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
+        if(!passwordField.getText().toString().equals(confirmPasswordField.getText().toString()) ){
+            confirmPasswordField.setError("Passwords do not match");
+            return;
+        }
+
 
 //        showProgressDialog();
-
+        progressBar.setVisibility(View.VISIBLE);
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -153,6 +165,7 @@ public class SignUpActivity extends AppCompatActivity {
                         }
 
 //                        hideProgressDialog();
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
     }
