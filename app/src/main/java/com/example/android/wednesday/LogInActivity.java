@@ -111,23 +111,29 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.forgotPassword)
-    public void resetPassword(){
-        mAuth.sendPasswordResetEmail(loginEmail.getText().toString())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+    public void resetPassword() {
+        if (!TextUtils.isEmpty(loginEmail.getText().toString())) {
+            mAuth.sendPasswordResetEmail(loginEmail.getText().toString())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
 
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
 
-            }
-        });
+                        }
+                    });
+        }
+        else{
+            loginEmail.setError("Enter email");
+        }
     }
+
 
     @Override
     public void onStart() {

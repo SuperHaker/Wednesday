@@ -2,6 +2,7 @@ package com.example.android.wednesday.fragments;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import com.example.android.wednesday.adapters.FeaturedAdapter;
 import com.example.android.wednesday.adapters.GridAdapter;
 import com.example.android.wednesday.models.CardModel;
 import com.example.android.wednesday.models.CategoryModel;
+import com.lsjwzh.widget.recyclerviewpager.LoopRecyclerViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,25 +69,45 @@ public class TabOneFragment extends Fragment {
 //        AutoScrollViewPager mViewPager = (AutoScrollViewPager) rootView.findViewById(R.id.viewPager);
 //        mViewPager.startAutoScroll();
 
-        mRecyclerViewFeatured = (RecyclerView) rootView.findViewById(R.id.featured_picks);
+//        mRecyclerViewFeatured = (RecyclerView) rootView.findViewById(R.id.featured_picks);
+        final LoopRecyclerViewPager mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks);
+
         mRecyclerViewTopPicks = (RecyclerView) rootView.findViewById(R.id.top_picks);
         mRecyclerViewTopPicks.setHasFixedSize(true);
-        mRecyclerViewFeatured.setHasFixedSize(true);
+//        mRecyclerViewFeatured.setHasFixedSize(true);
+        mLoopRecyclerView.setHasFixedSize(true);
+        mLayoutManagerFeatured = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        mLayoutManagerTopPicks = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+//        mRecyclerViewFeatured.setLayoutManager(mLayoutManagerFeatured);
+        mLoopRecyclerView.setLayoutManager(mLayoutManagerFeatured);
+        mRecyclerViewTopPicks.setLayoutManager(mLayoutManagerTopPicks);
 
         List<CardModel> dataSource = new ArrayList<CardModel>();
 
         for(int i = 0;i<5; i++){
-            dataSource.add(createCard());
+            dataSource.add(createCard(i));
         }
 
         mAdapter = new FeaturedAdapter(getContext(), dataSource);
-        mRecyclerViewFeatured.setAdapter(mAdapter);
+//        mRecyclerViewFeatured.setAdapter(mAdapter);
+        mLoopRecyclerView.setAdapter(mAdapter);
         mRecyclerViewTopPicks.setAdapter(mAdapter);
 
-        mLayoutManagerFeatured = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        mLayoutManagerTopPicks = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        mRecyclerViewFeatured.setLayoutManager(mLayoutManagerFeatured);
-        mRecyclerViewTopPicks.setLayoutManager(mLayoutManagerTopPicks);
+
+        final int speedScroll = 5000;
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                    mLoopRecyclerView.smoothScrollToPosition(mLoopRecyclerView.getCurrentPosition() + 1);
+                    handler.postDelayed(this,speedScroll);
+
+            }
+        };
+
+        handler.postDelayed(runnable,speedScroll);
+
+
 
         List<CategoryModel> categorySource = new ArrayList<>();
 
@@ -100,6 +122,7 @@ public class TabOneFragment extends Fragment {
 
         GridAdapter gridAdapter = new GridAdapter(getContext(), categorySource);
         categoryRecyclerView.setAdapter(gridAdapter);
+        categoryRecyclerView.setNestedScrollingEnabled(false);
 
 
 
@@ -110,9 +133,9 @@ public class TabOneFragment extends Fragment {
         return rootView;
     }
 
-    public CardModel createCard(){
+    public CardModel createCard(int i){
 
-        return  new CardModel("The Drunk House", "Rajouri", "1000");
+        return  new CardModel("The Drunk House " + Integer.toString(i), "Rajouri", "1000");
     }
 
     public CategoryModel createCategory(){

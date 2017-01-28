@@ -23,13 +23,22 @@
       android:textColor="#000"
       android:layout_margin="10dp"/>
 
-    <android.support.v7.widget.RecyclerView
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/featured_picks"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+
+        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:scrollbars="none"-->
+        <!--/>-->
+
+
+
+    <com.lsjwzh.widget.recyclerviewpager.LoopRecyclerViewPager
         android:id="@+id/featured_picks"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:scrollbars="none"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
         />
 
     <TextView
@@ -48,6 +57,11 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:scrollbars="none"
         />
+
+  <TextView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:text="Calendar to be added"/>
 
     <TextView
         android:layout_width="wrap_content"
