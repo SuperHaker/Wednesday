@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.adapters.FeaturedAdapter;
@@ -28,7 +29,6 @@ public class TabOneFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private RecyclerView mRecyclerViewFeatured;
     private RecyclerView mRecyclerViewTopPicks;
 
     private FeaturedAdapter mAdapter;
@@ -61,13 +61,13 @@ public class TabOneFragment extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_tab_one, container, false);
-//        AutoScrollViewPager mViewPager = (AutoScrollViewPager) rootView.findViewById(R.id.viewPager);
-//        mViewPager.startAutoScroll();
+
 
 //        mRecyclerViewFeatured = (RecyclerView) rootView.findViewById(R.id.featured_picks);
         final LoopRecyclerViewPager mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks);
@@ -92,6 +92,8 @@ public class TabOneFragment extends Fragment {
 //        mRecyclerViewFeatured.setAdapter(mAdapter);
         mLoopRecyclerView.setAdapter(mAdapter);
         mRecyclerViewTopPicks.setAdapter(mAdapter);
+
+
 
 
         final int speedScroll = 5000;
@@ -128,7 +130,15 @@ public class TabOneFragment extends Fragment {
 
 
 
+        final TextView todayEvents = (TextView) rootView.findViewById(R.id.today_events);
 
+        todayEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                todayEvents.setBackground(getResources().getDrawable(R.drawable.rounded_pressed));
+
+            }
+        });
 
         return rootView;
     }
@@ -141,5 +151,6 @@ public class TabOneFragment extends Fragment {
     public CategoryModel createCategory(){
         return new CategoryModel("Category");
     }
+
 
 }

@@ -7,7 +7,7 @@
     android:background="#009688"
     android:paddingTop="10dp"
 
-    tools:context="com.example.android.wednesday.SignUpActivity">
+    tools:context="com.example.android.wednesday.activities.SignUpActivity">
 
     <!-- Login progress -->
     <ProgressBar

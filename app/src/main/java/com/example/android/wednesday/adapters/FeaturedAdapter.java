@@ -1,6 +1,7 @@
 package com.example.android.wednesday.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.wednesday.R;
+import com.example.android.wednesday.activities.EventDetailsActivity;
 import com.example.android.wednesday.models.CardModel;
 
 import java.util.Collections;
@@ -21,20 +23,26 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.Featur
 
     private final LayoutInflater inflater;
     List<CardModel> data = Collections.EMPTY_LIST;
+    private Context context;
 
     public FeaturedAdapter(Context context, List<CardModel> dataSource) {
         inflater = LayoutInflater.from(context);
         this.data = dataSource;
+        this.context = context;
     }
 
     @Override
     public FeaturedViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = inflater.inflate(R.layout.image_card, parent, false);
-        FeaturedViewHolder featuredViewHolder = new FeaturedViewHolder(view);
+        FeaturedViewHolder featuredViewHolder = new FeaturedViewHolder(context, view);
         return featuredViewHolder;
 
     }
+
+
+
+
 
     @Override
     public void onBindViewHolder(FeaturedViewHolder holder, int position) {
@@ -51,22 +59,29 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.Featur
         return data.size();
     }
 
-    class FeaturedViewHolder extends RecyclerView.ViewHolder{
+    class FeaturedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView eventPlace;
         TextView eventAddress;
         TextView eventCost;
+        private Context context;
 
-        public FeaturedViewHolder(View view){
+        public FeaturedViewHolder(Context context, View view){
             super(view);
+            this.context = context;
             eventPlace = (TextView) itemView.findViewById(R.id.event_place);
             eventAddress = (TextView) itemView.findViewById(R.id.event_address);
             eventCost = (TextView) itemView.findViewById(R.id.event_cost);
+            view.setOnClickListener(this);
+        }
 
-
-
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(context, EventDetailsActivity.class);
+            context.startActivity(intent);
         }
     }
+
 
 }
 

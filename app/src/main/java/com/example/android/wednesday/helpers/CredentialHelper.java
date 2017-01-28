@@ -1,4 +1,4 @@
-package com.example.android.wednesday;
+package com.example.android.wednesday.helpers;
 
 import android.content.Context;
 import android.text.TextUtils;
