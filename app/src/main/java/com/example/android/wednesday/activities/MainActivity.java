@@ -13,8 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.wednesday.R;
-import com.example.android.wednesday.fragments.TabOneFragment;
-import com.example.android.wednesday.fragments.TabTwoFragment;
+import com.example.android.wednesday.fragments.DineOutTabFragment;
+import com.example.android.wednesday.fragments.EventsTabFragment;
+import com.example.android.wednesday.fragments.ActivitiesTabFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -55,8 +56,11 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        mSectionsPagerAdapter.addFrag(new TabOneFragment(), "ONE");
-        mSectionsPagerAdapter.addFrag(new TabTwoFragment(), "TWO");
+        mSectionsPagerAdapter.addFrag(new EventsTabFragment(), "ONE");
+        mSectionsPagerAdapter.addFrag(new ActivitiesTabFragment(), "TWO");
+        mSectionsPagerAdapter.addFrag(new DineOutTabFragment(), "THREE");
+
+
 
         viewPager.setAdapter(mSectionsPagerAdapter);
     }
@@ -126,9 +130,9 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     return "Events";
                 case 1:
-                    return "Gourmet";
+                    return "Activities";
                 case 2:
-                    return "SECTION 3";
+                    return "Dine-Out";
             }
             return null;
         }
