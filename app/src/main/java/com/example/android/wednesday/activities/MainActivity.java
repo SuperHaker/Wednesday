@@ -1,5 +1,6 @@
 package com.example.android.wednesday.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -9,13 +10,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.android.wednesday.R;
+import com.example.android.wednesday.fragments.ActivitiesTabFragment;
 import com.example.android.wednesday.fragments.DineOutTabFragment;
 import com.example.android.wednesday.fragments.EventsTabFragment;
-import com.example.android.wednesday.fragments.ActivitiesTabFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -39,7 +42,19 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
 //        params.setScrollFlags(0);  // clear all scroll flags
+
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
+
+        LayoutInflater inflator = (LayoutInflater) this .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflator.inflate(R.layout.location_header, null);
+        toolbar.addView(v);
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.setCustomView(v);
+
+
 
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);

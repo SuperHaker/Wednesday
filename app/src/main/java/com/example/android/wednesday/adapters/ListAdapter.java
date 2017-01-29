@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.activities.EventDetailsActivity;
@@ -50,17 +51,33 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
 
     class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+        ImageView heart;
         private Context context;
         public ListViewHolder(Context context, View view){
             super(view);
             this.context = context;
+            heart = (ImageView) itemView.findViewById(R.id.favorite);
+            heart.setTag(R.drawable.whiteheart);
             view.setOnClickListener(this);
+            heart.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(context, EventDetailsActivity.class);
-            context.startActivity(intent);
+
+            if (view.getId() == heart.getId()) {
+                if((Integer)heart.getTag() == R.drawable.whiteheart) {
+                    heart.setImageResource(R.drawable.redheart);
+                    heart.setTag(R.drawable.redheart);
+                }
+                else{
+                    heart.setImageResource(R.drawable.whiteheart);
+                    heart.setTag(R.drawable.whiteheart);
+                }
+            } else {
+                Intent intent = new Intent(context, EventDetailsActivity.class);
+                context.startActivity(intent);
+            }
         }
     }
 }

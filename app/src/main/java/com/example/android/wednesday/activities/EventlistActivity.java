@@ -18,6 +18,8 @@ public class EventlistActivity extends AppCompatActivity {
     private ListAdapter listAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,10 +39,10 @@ public class EventlistActivity extends AppCompatActivity {
         listRecyclerView.setAdapter(listAdapter);
 
 
-
     }
 
     public EventListitemModel createEventListitem(int i){
         return new EventListitemModel("Event name" + Integer.toString(i), "Place", "Date");
     }
+
 }

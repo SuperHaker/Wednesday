@@ -34,7 +34,7 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.Featur
     @Override
     public FeaturedViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = inflater.inflate(R.layout.image_card, parent, false);
+        View view = inflater.inflate(R.layout.featured_card, parent, false);
         FeaturedViewHolder featuredViewHolder = new FeaturedViewHolder(context, view);
         return featuredViewHolder;
 

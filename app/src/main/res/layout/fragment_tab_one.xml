@@ -18,19 +18,12 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="Featured Events"
-      android:layout_gravity="center"
-      android:textSize="20sp"
+      android:layout_gravity="start"
+      android:textSize="14sp"
       android:textColor="#000"
-      android:layout_margin="10dp"/>
-
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/featured_picks"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-
-        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--android:scrollbars="none"-->
-        <!--/>-->
+      android:layout_marginLeft="8dp"
+      android:layout_marginBottom="4dp"
+      android:layout_marginTop="4dp"/>
 
 
     <com.lsjwzh.widget.recyclerviewpager.LoopRecyclerViewPager
@@ -41,17 +34,16 @@
         />
 
 
-
-    
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Top Picks"
-        android:layout_gravity="center"
-        android:textSize="20sp"
+        android:text="Zighway's Top Picks"
+        android:layout_gravity="start"
+        android:textSize="14sp"
         android:textColor="#000"
-        android:layout_margin="10dp"/>
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="4dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/top_picks"
@@ -82,31 +74,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="10dp" >
 
-        >
 
- <TextView
-     android:id="@+id/today_events"
-     android:layout_width="wrap_content"
-     android:layout_height="wrap_content"
-     android:background="@drawable/selector"
-     android:layout_marginLeft="10dp"
-     android:text="Today"/>
-
-    <TextView
-        android:id="@+id/tomorrow_events"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:text="Tomorrow"/>
-
-    <TextView
-        android:id="@+id/thisWeek_events"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:text="This Week"/>
 
     </LinearLayout>
 
@@ -114,10 +84,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Categories"
-        android:layout_gravity="center_horizontal"
-        android:textSize="20sp"
+        android:layout_gravity="start"
+        android:textSize="14sp"
         android:textColor="#000"
-        android:layout_margin="5dp"
+        android:layout_marginLeft="4dp"
         />
 
 

@@ -10,11 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.adapters.FeaturedAdapter;
 import com.example.android.wednesday.adapters.GridAdapter;
+import com.example.android.wednesday.adapters.TopPicksAdapter;
 import com.example.android.wednesday.models.CardModel;
 import com.example.android.wednesday.models.CategoryModel;
 import com.lsjwzh.widget.recyclerviewpager.LoopRecyclerViewPager;
@@ -30,8 +30,10 @@ public class EventsTabFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private RecyclerView mRecyclerViewTopPicks;
+    private LoopRecyclerViewPager mLoopRecyclerView;
 
     private FeaturedAdapter mAdapter;
+    private TopPicksAdapter mTopPicksAdapter;
     private RecyclerView.LayoutManager mLayoutManagerFeatured;
     private RecyclerView.LayoutManager mLayoutManagerTopPicks;
 
@@ -68,17 +70,15 @@ public class EventsTabFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_tab_one, container, false);
 
-
-//        mRecyclerViewFeatured = (RecyclerView) rootView.findViewById(R.id.featured_picks);
-        final LoopRecyclerViewPager mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks);
-
+        mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks);
         mRecyclerViewTopPicks = (RecyclerView) rootView.findViewById(R.id.top_picks);
+
         mRecyclerViewTopPicks.setHasFixedSize(true);
-//        mRecyclerViewFeatured.setHasFixedSize(true);
         mLoopRecyclerView.setHasFixedSize(true);
+
         mLayoutManagerFeatured = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         mLayoutManagerTopPicks = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-//        mRecyclerViewFeatured.setLayoutManager(mLayoutManagerFeatured);
+
         mLoopRecyclerView.setLayoutManager(mLayoutManagerFeatured);
         mRecyclerViewTopPicks.setLayoutManager(mLayoutManagerTopPicks);
 
@@ -89,14 +89,15 @@ public class EventsTabFragment extends Fragment {
         }
 
         mAdapter = new FeaturedAdapter(getContext(), dataSource);
-//        mRecyclerViewFeatured.setAdapter(mAdapter);
+        mTopPicksAdapter = new TopPicksAdapter(getContext(), dataSource);
+
         mLoopRecyclerView.setAdapter(mAdapter);
-        mRecyclerViewTopPicks.setAdapter(mAdapter);
+        mRecyclerViewTopPicks.setAdapter(mTopPicksAdapter);
 
 
 
 
-        final int speedScroll = 5000;
+        final int speedScroll = 2000;
         final Handler handler = new Handler();
         final Runnable runnable = new Runnable() {
             @Override
@@ -126,19 +127,6 @@ public class EventsTabFragment extends Fragment {
         categoryRecyclerView.setAdapter(gridAdapter);
         categoryRecyclerView.setNestedScrollingEnabled(false);
 
-
-
-
-
-        final TextView todayEvents = (TextView) rootView.findViewById(R.id.today_events);
-
-        todayEvents.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                todayEvents.setBackground(getResources().getDrawable(R.drawable.rounded_pressed));
-
-            }
-        });
 
         return rootView;
     }
