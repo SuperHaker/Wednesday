@@ -27,7 +27,9 @@
             android:name=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.EventlistActivity" />
-        <activity android:name=".activities.EventDetailsActivity"></activity>
+        <activity android:name=".activities.EventDetailsActivity" />
+        <activity android:name=".activities.ActivityDetailsActivity" />
+        <activity android:name=".activities.ActivitylistActivity"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="2dp">
+
+    <ImageView
+        android:id="@+id/activity_image"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/template3"
+        android:scaleType="fitXY"/>
+
+    <FrameLayout
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/offer2"
+            />
+
+
+
+        <TextView
+            android:id="@+id/bonus_offer_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30% off"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:layout_gravity="center"/>
+
+
+    </FrameLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Event Name"
+            android:textColor="#fff"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:textSize="14sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Place"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/favorite_activity"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:src="@drawable/whiteheart"
+        android:layout_margin="5dp"
+        android:layout_gravity="bottom|end"/>
+
+</FrameLayout>

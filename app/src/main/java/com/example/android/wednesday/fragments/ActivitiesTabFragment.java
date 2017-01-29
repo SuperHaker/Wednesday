@@ -1,12 +1,25 @@
 package com.example.android.wednesday.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.wednesday.R;
+import com.example.android.wednesday.adapters.ActivityGridAdapter;
+import com.example.android.wednesday.adapters.FeaturedActivitiesAdapter;
+import com.example.android.wednesday.adapters.TopPicksActivitiesAdapter;
+import com.example.android.wednesday.models.CardModel;
+import com.example.android.wednesday.models.CategoryModel;
+import com.lsjwzh.widget.recyclerviewpager.LoopRecyclerViewPager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,6 +33,16 @@ public class ActivitiesTabFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private RecyclerView mRecyclerViewTopPicks;
+    private LoopRecyclerViewPager mLoopRecyclerView;
+
+    private FeaturedActivitiesAdapter mAdapter;
+    private TopPicksActivitiesAdapter mTopPicksAdapter;
+    private RecyclerView.LayoutManager mLayoutManagerFeatured;
+    private RecyclerView.LayoutManager mLayoutManagerTopPicks;
+
+    GridLayoutManager mGridManager;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -61,11 +84,72 @@ public class ActivitiesTabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab_two, container, false);
+        View rootView =  inflater.inflate(R.layout.fragment_tab_two, container, false);
+
+        mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks_activities);
+        mRecyclerViewTopPicks = (RecyclerView) rootView.findViewById(R.id.top_picks_activities);
+        mRecyclerViewTopPicks.setHasFixedSize(true);
+        mLoopRecyclerView.setHasFixedSize(true);
+
+        mLayoutManagerFeatured = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        mLayoutManagerTopPicks = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        mLoopRecyclerView.setLayoutManager(mLayoutManagerFeatured);
+        mRecyclerViewTopPicks.setLayoutManager(mLayoutManagerTopPicks);
+
+        List<CardModel> dataSource = new ArrayList<CardModel>();
+
+
+        for(int i = 0;i<5; i++){
+            dataSource.add(createCard(i));
+        }
+
+        mAdapter = new FeaturedActivitiesAdapter(getContext(), dataSource);
+        mTopPicksAdapter = new TopPicksActivitiesAdapter(getContext(), dataSource);
+
+        mLoopRecyclerView.setAdapter(mAdapter);
+        mRecyclerViewTopPicks.setAdapter(mTopPicksAdapter);
+
+        final int speedScroll = 2000;
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                mLoopRecyclerView.smoothScrollToPosition(mLoopRecyclerView.getCurrentPosition() + 1);
+                handler.postDelayed(this,speedScroll);
+
+            }
+        };
+
+        handler.postDelayed(runnable,speedScroll);
+
+        List<CategoryModel> categorySource = new ArrayList<>();
+
+        for(int i = 0;i < 10; i++){
+            categorySource.add(createCategory());
+        }
+
+        mGridManager = new GridLayoutManager(getContext(), 2);
+        RecyclerView categoryRecyclerView = (RecyclerView) rootView.findViewById(R.id.categories_activities);
+        categoryRecyclerView.setHasFixedSize(true);
+        categoryRecyclerView.setLayoutManager(mGridManager);
+
+        ActivityGridAdapter gridAdapter = new ActivityGridAdapter(getContext(), categorySource);
+        categoryRecyclerView.setAdapter(gridAdapter);
+        categoryRecyclerView.setNestedScrollingEnabled(false);
+
+        return rootView;
+
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    public CardModel createCard(int i){
 
+        return  new CardModel("Random Lake " + Integer.toString(i), "Kasol", "Cost");
+    }
+
+    public CategoryModel createCategory(){
+        return new CategoryModel("Category");
+    }
     }
 
 
