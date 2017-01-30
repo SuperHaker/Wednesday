@@ -39,6 +39,10 @@ public class EventsTabFragment extends Fragment {
 
     GridLayoutManager mGridManager;
 
+    final int speedScroll = 2000;
+    private Handler handler;
+    private Runnable runnable;
+
 
 
     // TODO: Rename and change types of parameters
@@ -97,9 +101,8 @@ public class EventsTabFragment extends Fragment {
 
 
 
-        final int speedScroll = 2000;
-        final Handler handler = new Handler();
-        final Runnable runnable = new Runnable() {
+        handler = new Handler();
+        runnable = new Runnable() {
             @Override
             public void run() {
                     mLoopRecyclerView.smoothScrollToPosition(mLoopRecyclerView.getCurrentPosition() + 1);
@@ -108,7 +111,6 @@ public class EventsTabFragment extends Fragment {
             }
         };
 
-        handler.postDelayed(runnable,speedScroll);
 
 
 
@@ -129,6 +131,19 @@ public class EventsTabFragment extends Fragment {
 
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        handler.postDelayed(runnable,speedScroll);
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        handler.removeCallbacks(runnable);
     }
 
     public CardModel createCard(int i){

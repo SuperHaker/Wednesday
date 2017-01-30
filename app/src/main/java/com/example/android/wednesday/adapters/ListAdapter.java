@@ -19,7 +19,7 @@ import java.util.List;
  * Created by hp pc on 1/29/2017.
  */
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder> {
+public class ListAdapter extends RecyclerView.Adapter<ListAdapter.EventListViewHolder> {
 
 
     private final LayoutInflater inflater;
@@ -33,14 +33,14 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
     }
 
     @Override
-    public ListAdapter.ListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ListAdapter.EventListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.event_listitem_layout, parent, false);
-        ListAdapter.ListViewHolder listViewHolder = new ListAdapter.ListViewHolder(context, view);
+        ListAdapter.EventListViewHolder listViewHolder = new ListAdapter.EventListViewHolder(context, view);
         return listViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(ListAdapter.ListViewHolder holder, int position) {
+    public void onBindViewHolder(ListAdapter.EventListViewHolder holder, int position) {
 
     }
 
@@ -49,30 +49,30 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
         return dataSource.size();
     }
 
-    class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class EventListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        ImageView heart;
+        ImageView heartEvent;
         private Context context;
-        public ListViewHolder(Context context, View view){
+        public EventListViewHolder(Context context, View view){
             super(view);
             this.context = context;
-            heart = (ImageView) itemView.findViewById(R.id.favorite);
-            heart.setTag(R.drawable.whiteheart);
+            heartEvent = (ImageView) itemView.findViewById(R.id.favorite);
+            heartEvent.setTag(R.drawable.whiteheart);
             view.setOnClickListener(this);
-            heart.setOnClickListener(this);
+            heartEvent.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
 
-            if (view.getId() == heart.getId()) {
-                if((Integer)heart.getTag() == R.drawable.whiteheart) {
-                    heart.setImageResource(R.drawable.redheart);
-                    heart.setTag(R.drawable.redheart);
+            if (view.getId() == heartEvent.getId()) {
+                if((Integer)heartEvent.getTag() == R.drawable.whiteheart) {
+                    heartEvent.setImageResource(R.drawable.redheart);
+                    heartEvent.setTag(R.drawable.redheart);
                 }
                 else{
-                    heart.setImageResource(R.drawable.whiteheart);
-                    heart.setTag(R.drawable.whiteheart);
+                    heartEvent.setImageResource(R.drawable.whiteheart);
+                    heartEvent.setTag(R.drawable.whiteheart);
                 }
             } else {
                 Intent intent = new Intent(context, EventDetailsActivity.class);
@@ -81,3 +81,5 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
         }
     }
 }
+
+

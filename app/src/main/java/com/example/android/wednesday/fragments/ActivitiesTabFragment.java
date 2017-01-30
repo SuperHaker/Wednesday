@@ -42,6 +42,11 @@ public class ActivitiesTabFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManagerFeatured;
     private RecyclerView.LayoutManager mLayoutManagerTopPicks;
 
+    private Handler handler;
+    private Runnable runnable;
+    final int speedScroll = 2000;
+
+
     GridLayoutManager mGridManager;
 
     // TODO: Rename and change types of parameters
@@ -110,9 +115,8 @@ public class ActivitiesTabFragment extends Fragment {
         mLoopRecyclerView.setAdapter(mAdapter);
         mRecyclerViewTopPicks.setAdapter(mTopPicksAdapter);
 
-        final int speedScroll = 2000;
-        final Handler handler = new Handler();
-        final Runnable runnable = new Runnable() {
+         handler = new Handler();
+        runnable = new Runnable() {
             @Override
             public void run() {
                 mLoopRecyclerView.smoothScrollToPosition(mLoopRecyclerView.getCurrentPosition() + 1);
@@ -121,7 +125,6 @@ public class ActivitiesTabFragment extends Fragment {
             }
         };
 
-        handler.postDelayed(runnable,speedScroll);
 
         List<CategoryModel> categorySource = new ArrayList<>();
 
@@ -139,6 +142,20 @@ public class ActivitiesTabFragment extends Fragment {
         categoryRecyclerView.setNestedScrollingEnabled(false);
 
         return rootView;
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        handler.removeCallbacks(runnable);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        handler.postDelayed(runnable,speedScroll);
+
 
     }
 

@@ -19,7 +19,7 @@ import java.util.List;
  * Created by hp pc on 1/29/2017.
  */
 
-public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapter.ListViewHolder> {
+public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapter.ActivityListViewHolder> {
 
 
     private final LayoutInflater inflater;
@@ -33,14 +33,14 @@ public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapte
     }
 
     @Override
-    public ActivityListAdapter.ListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ActivityListAdapter.ActivityListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.activities_listitem_layout, parent, false);
-        ActivityListAdapter.ListViewHolder listViewHolder = new ActivityListAdapter.ListViewHolder(context, view);
+        ActivityListAdapter.ActivityListViewHolder listViewHolder = new ActivityListAdapter.ActivityListViewHolder(context, view);
         return listViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(ActivityListAdapter.ListViewHolder holder, int position) {
+    public void onBindViewHolder(ActivityListAdapter.ActivityListViewHolder holder, int position) {
 
     }
 
@@ -49,11 +49,11 @@ public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapte
         return dataSource.size();
     }
 
-    class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ActivityListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         ImageView heart;
         private Context context;
-        public ListViewHolder(Context context, View view){
+        public ActivityListViewHolder(Context context, View view){
             super(view);
             this.context = context;
             heart = (ImageView) itemView.findViewById(R.id.favorite_activity);
