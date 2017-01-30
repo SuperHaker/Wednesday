@@ -10,24 +10,29 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.android.wednesday.R;
-import com.example.android.wednesday.adapters.MultipleImagesEventsAdapter;
+import com.example.android.wednesday.adapters.MultipleImagesActivitiesAdapter;
 
-public class EventDetailsActivity extends AppCompatActivity {
+public class ActivityDetailsActivity extends AppCompatActivity {
 
-    private MultipleImagesEventsAdapter adapter;
+    private MultipleImagesActivitiesAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView recyclerView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_details);
-        ImageView mapButton = (ImageView) findViewById(R.id.event_map);
-        recyclerView = (RecyclerView) findViewById(R.id.images_for_an_event);
+        setContentView(R.layout.activity_details_activity);
+        ImageView mapButton = (ImageView) findViewById(R.id.activity_map);
+        recyclerView = (RecyclerView) findViewById(R.id.images_for_an_activity);
         mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+
         recyclerView.setLayoutManager(mLayoutManager);
-        adapter = new MultipleImagesEventsAdapter(getApplicationContext());
+        adapter = new MultipleImagesActivitiesAdapter(getApplicationContext());
         recyclerView.setAdapter(adapter);
+
+
 
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +47,5 @@ public class EventDetailsActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 }
