@@ -1,5 +1,6 @@
 package com.example.android.wednesday.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -9,8 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.example.android.wednesday.R;
+import com.example.android.wednesday.activities.ActivitiesFilter;
 import com.example.android.wednesday.adapters.ActivityGridAdapter;
 import com.example.android.wednesday.adapters.FeaturedActivitiesAdapter;
 import com.example.android.wednesday.adapters.TopPicksActivitiesAdapter;
@@ -90,6 +94,15 @@ public class ActivitiesTabFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_tab_two, container, false);
+        FrameLayout activitiesFilterFrame = (FrameLayout) rootView.findViewById(R.id.activities_filter);
+        Button activitiesFilter = (Button) activitiesFilterFrame.findViewById(R.id.f_button);
+        activitiesFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), ActivitiesFilter.class);
+                startActivity(intent);
+            }
+        });
 
         mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks_activities);
         mRecyclerViewTopPicks = (RecyclerView) rootView.findViewById(R.id.top_picks_activities);

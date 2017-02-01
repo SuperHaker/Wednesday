@@ -1,6 +1,7 @@
 package com.example.android.wednesday.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -10,8 +11,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.example.android.wednesday.R;
+import com.example.android.wednesday.activities.EventFilter;
 import com.example.android.wednesday.adapters.FeaturedAdapter;
 import com.example.android.wednesday.adapters.GridAdapter;
 import com.example.android.wednesday.adapters.TopPicksAdapter;
@@ -73,6 +77,16 @@ public class EventsTabFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_tab_one, container, false);
+
+        FrameLayout eventFilterFrame = (FrameLayout) rootView.findViewById(R.id.event_filter);
+        Button eventFilter = (Button) eventFilterFrame.findViewById(R.id.f_button);
+        eventFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), EventFilter.class);
+                startActivity(intent);
+            }
+        });
 
         mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks);
         mRecyclerViewTopPicks = (RecyclerView) rootView.findViewById(R.id.top_picks);
