@@ -1,8 +1,15 @@
 package com.example.android.wednesday.activities;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +21,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.fragments.ActivitiesTabFragment;
@@ -21,10 +30,12 @@ import com.example.android.wednesday.fragments.DineOutTabFragment;
 import com.example.android.wednesday.fragments.EventsTabFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
 
     private Toolbar toolbar;
@@ -32,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
+    TextView currentLocation;
 
 
 
@@ -51,8 +63,7 @@ public class MainActivity extends AppCompatActivity {
         LayoutInflater inflator = (LayoutInflater) this .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.location_header, null);
         toolbar.addView(v);
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setCustomView(v);
+        currentLocation = (TextView) toolbar.findViewById(R.id.current_location);
 
 
 
@@ -66,6 +77,19 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
 
+        LocationManager locationManager = (LocationManager)
+                getSystemService(Context.LOCATION_SERVICE);
+        LocationListener locationListener = new MyLocationListener();
+        boolean flag = displayGpsStatus();
+        if(flag) {
+            try {
+                locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER, 2000, 500, locationListener);
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -79,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.setAdapter(mSectionsPagerAdapter);
     }
-
 
 
     @Override
@@ -152,5 +175,63 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
+
+    public class MyLocationListener implements LocationListener {
+        private static final String TAG = "Location";
+
+        @Override
+        public void onLocationChanged(Location loc) {
+            currentLocation.setText("Getting Location...");
+//            pb.setVisibility(View.INVISIBLE);
+
+//            String longitude = "Longitude: " + loc.getLongitude();
+//            Log.v(TAG, longitude);
+//            String latitude = "Latitude: " + loc.getLatitude();
+//            Log.v(TAG, latitude);
+
+        /*------- To get city name from coordinates -------- */
+            String cityName = null;
+            Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
+            List<Address> addresses;
+            try {
+                addresses = gcd.getFromLocation(loc.getLatitude(),
+                        loc.getLongitude(), 1);
+                if (addresses.size() > 0) {
+//                Log.v(TAG, addresses.toString());
+                    cityName = addresses.get(0).getSubLocality() + ", " + addresses.get(0).getLocality();
+                    Toast.makeText(
+                            getBaseContext(),
+                            "Location: " + cityName, Toast.LENGTH_SHORT).show();
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            currentLocation.setText(cityName);
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {}
+
+        @Override
+        public void onProviderEnabled(String provider) {}
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
+    }
+    private Boolean displayGpsStatus() {
+        ContentResolver contentResolver = getBaseContext()
+                .getContentResolver();
+        boolean gpsStatus = Settings.Secure
+                .isLocationProviderEnabled(contentResolver,
+                        LocationManager.GPS_PROVIDER);
+        if (gpsStatus) {
+            return true;
+
+        } else {
+            return false;
+        }
+    }
+
 
 }

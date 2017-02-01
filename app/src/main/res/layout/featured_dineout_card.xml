@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    >
+
+    <ImageView
+        android:id="@+id/activity_picture"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:src="@drawable/templaate4"
+        android:scaleType="fitXY"
+        android:layout_marginBottom="3dp"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        >
+
+        <TextView
+            android:id="@+id/activity_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Restaurant Name"
+            android:textSize="14sp"
+            android:textColor="#fff"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/activity_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Place"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/activity_cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cost"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:textSize="14sp"/>
+
+
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" F "
+        android:layout_margin="6dp"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:background="@drawable/label"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_gravity="bottom|end"/>
+</FrameLayout>

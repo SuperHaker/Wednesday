@@ -3,14 +3,14 @@
     package="com.example.android.wednesday">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activities.LogInActivity"
             android:label="@string/app_name"
@@ -30,7 +30,9 @@
         <activity android:name=".activities.EventlistActivity" />
         <activity android:name=".activities.EventDetailsActivity" />
         <activity android:name=".activities.ActivityDetailsActivity" />
-        <activity android:name=".activities.ActivitylistActivity"></activity>
+        <activity android:name=".activities.ActivitylistActivity" />
+        <activity android:name=".activities.DineoutDetailsActivity" />
+        <activity android:name=".activities.DineoutlistActivity"></activity>
     </application>
 
 </manifest>
