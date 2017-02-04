@@ -6,9 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.activities.EventlistActivity;
 import com.example.android.wednesday.models.CategoryModel;
@@ -21,6 +23,7 @@ import java.util.List;
  */
 
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.CategoryViewHolder> {
+
 
     private List<CategoryModel> dataSource = Collections.EMPTY_LIST;
     private final LayoutInflater inflater;
@@ -48,7 +51,8 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.CategoryViewHo
     @Override
     public void onBindViewHolder(CategoryViewHolder holder, int position) {
         CategoryModel currentCard = dataSource.get(position);
-        holder.categoryName.setText(currentCard.categoryName + " " + Integer.toString(position));
+        holder.categoryName.setText(currentCard.categoryName);
+        Glide.with(context).load(currentCard.categoryPhoto).into(holder.categoryPhoto);
 
     }
 
@@ -62,12 +66,15 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.CategoryViewHo
     class CategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView categoryName;
         private Context context;
+        public ImageView categoryPhoto;
+
 
 
         public CategoryViewHolder(Context context, View view){
             super(view);
             this.context = context;
             categoryName = (TextView) itemView.findViewById(R.id.category_name);
+            categoryPhoto = (ImageView) itemView.findViewById(R.id.category_image);
             view.setOnClickListener(this);
 
         }

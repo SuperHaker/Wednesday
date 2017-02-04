@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,11 @@ import com.example.android.wednesday.adapters.GridAdapter;
 import com.example.android.wednesday.adapters.TopPicksAdapter;
 import com.example.android.wednesday.models.CardModel;
 import com.example.android.wednesday.models.CategoryModel;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.lsjwzh.widget.recyclerviewpager.LoopRecyclerViewPager;
 
 import java.util.ArrayList;
@@ -35,11 +41,18 @@ public class EventsTabFragment extends Fragment {
 
     private RecyclerView mRecyclerViewTopPicks;
     private LoopRecyclerViewPager mLoopRecyclerView;
+    CategoryModel model;
 
     private FeaturedAdapter mAdapter;
     private TopPicksAdapter mTopPicksAdapter;
     private RecyclerView.LayoutManager mLayoutManagerFeatured;
     private RecyclerView.LayoutManager mLayoutManagerTopPicks;
+    private DatabaseReference mDatabaseReference ;
+    CategoryModel categoryModel;
+    ValueEventListener valueEventListener;
+    GridAdapter gridAdapter;
+
+
 
     GridLayoutManager mGridManager;
 
@@ -47,7 +60,7 @@ public class EventsTabFragment extends Fragment {
     private Handler handler;
     private Runnable runnable;
 
-
+    List<CategoryModel> categorySource;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -77,6 +90,7 @@ public class EventsTabFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_tab_one, container, false);
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("events").child("categories");
 
         FrameLayout eventFilterFrame = (FrameLayout) rootView.findViewById(R.id.event_filter);
         Button eventFilter = (Button) eventFilterFrame.findViewById(R.id.f_button);
@@ -100,7 +114,7 @@ public class EventsTabFragment extends Fragment {
         mLoopRecyclerView.setLayoutManager(mLayoutManagerFeatured);
         mRecyclerViewTopPicks.setLayoutManager(mLayoutManagerTopPicks);
 
-        List<CardModel> dataSource = new ArrayList<CardModel>();
+        final List<CardModel> dataSource = new ArrayList<CardModel>();
 
         for(int i = 0;i<5; i++){
             dataSource.add(createCard(i));
@@ -128,20 +142,39 @@ public class EventsTabFragment extends Fragment {
 
 
 
-        List<CategoryModel> categorySource = new ArrayList<>();
+          categorySource = new ArrayList<>();
+        valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                    Log.v("Ye raha", "" + childDataSnapshot.getKey()); //displays the key for the node
+                    Log.v("Ye raha", "" + childDataSnapshot.child("categoryName").getValue());
+                    CategoryModel model = childDataSnapshot.getValue(CategoryModel.class);
+                    categorySource.add(model);
+                    gridAdapter.notifyDataSetChanged(); //gives the value for given keyname
 
-        for(int i = 0;i < 10; i++){
-            categorySource.add(createCategory());
-        }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        } ;
+
+        mDatabaseReference.addValueEventListener(valueEventListener);
+
 
         mGridManager = new GridLayoutManager(getContext(), 2);
         RecyclerView categoryRecyclerView = (RecyclerView) rootView.findViewById(R.id.categories);
         categoryRecyclerView.setHasFixedSize(true);
         categoryRecyclerView.setLayoutManager(mGridManager);
 
-        GridAdapter gridAdapter = new GridAdapter(getContext(), categorySource);
+        gridAdapter = new GridAdapter(getContext(), categorySource);
         categoryRecyclerView.setAdapter(gridAdapter);
         categoryRecyclerView.setNestedScrollingEnabled(false);
+
+
 
 
         return rootView;
@@ -165,9 +198,6 @@ public class EventsTabFragment extends Fragment {
         return  new CardModel("The Drunk House " + Integer.toString(i), "Rajouri", "1000");
     }
 
-    public CategoryModel createCategory(){
-        return new CategoryModel("Category");
-    }
 
 
 }
