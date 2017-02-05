@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -27,6 +28,7 @@ public class ActivityDetailsActivity extends AppCompatActivity {
         ImageView mapButton = (ImageView) findViewById(R.id.activity_map);
         recyclerView = (RecyclerView) findViewById(R.id.images_for_an_activity);
         mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView.setLayoutManager(mLayoutManager);
         adapter = new MultipleImagesActivitiesAdapter(getApplicationContext());
@@ -47,5 +49,15 @@ public class ActivityDetailsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

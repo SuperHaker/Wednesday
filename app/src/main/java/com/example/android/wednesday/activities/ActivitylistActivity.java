@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.adapters.ActivityListAdapter;
@@ -22,6 +23,7 @@ public class ActivitylistActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activitylist);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         listRecyclerView = (RecyclerView) findViewById(R.id.activity_listView);
         listRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
@@ -39,5 +41,15 @@ public class ActivitylistActivity extends AppCompatActivity {
 
     public EventListitemModel createEventListitem(int i){
         return new EventListitemModel("Activity Name" + Integer.toString(i), "Place", "Date");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
