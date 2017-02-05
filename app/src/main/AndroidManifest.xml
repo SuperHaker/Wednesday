@@ -33,10 +33,12 @@
         <activity android:name=".activities.ActivitylistActivity" />
         <activity android:name=".activities.DineoutDetailsActivity" />
         <activity android:name=".activities.DineoutlistActivity" />
-        <activity android:name=".activities.DineoutFilter" />
-        <activity android:name=".activities.ActivitiesFilter" />
-        <activity android:name=".activities.EventFilter" >
-        </activity>
+        <activity android:name=".activities.DineoutFilter"
+            android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.ActivitiesFilter"
+            android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.EventFilter"
+            android:parentActivityName=".activities.MainActivity"/>
     </application>
 
 </manifest>

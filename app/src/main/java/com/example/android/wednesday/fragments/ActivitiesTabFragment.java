@@ -8,10 +8,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.activities.ActivitiesFilter;
@@ -87,6 +88,7 @@ public class ActivitiesTabFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -94,15 +96,6 @@ public class ActivitiesTabFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_tab_two, container, false);
-        FrameLayout activitiesFilterFrame = (FrameLayout) rootView.findViewById(R.id.activities_filter);
-        Button activitiesFilter = (Button) activitiesFilterFrame.findViewById(R.id.f_button);
-        activitiesFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), ActivitiesFilter.class);
-                startActivity(intent);
-            }
-        });
 
         mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks_activities);
         mRecyclerViewTopPicks = (RecyclerView) rootView.findViewById(R.id.top_picks_activities);
@@ -156,6 +149,24 @@ public class ActivitiesTabFragment extends Fragment {
 
         return rootView;
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu2, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+
+            case R.id.filters:
+                Intent intent = new Intent(getContext(), ActivitiesFilter.class);
+                startActivity(intent);
+                return true;
+
+        }return super.onOptionsItemSelected(item);
     }
 
     @Override

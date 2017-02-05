@@ -10,10 +10,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.activities.EventFilter;
@@ -82,6 +83,7 @@ public class EventsTabFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setHasOptionsMenu(true);
     }
 
 
@@ -92,15 +94,6 @@ public class EventsTabFragment extends Fragment {
         View rootView =  inflater.inflate(R.layout.fragment_tab_one, container, false);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("events").child("categories");
 
-        FrameLayout eventFilterFrame = (FrameLayout) rootView.findViewById(R.id.event_filter);
-        Button eventFilter = (Button) eventFilterFrame.findViewById(R.id.f_button);
-        eventFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), EventFilter.class);
-                startActivity(intent);
-            }
-        });
 
         mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks);
         mRecyclerViewTopPicks = (RecyclerView) rootView.findViewById(R.id.top_picks);
@@ -191,6 +184,24 @@ public class EventsTabFragment extends Fragment {
     public void onPause() {
         super.onPause();
         handler.removeCallbacks(runnable);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    inflater.inflate(R.menu.menu2, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+
+            case R.id.filters:
+                Intent intent = new Intent(getContext(), EventFilter.class);
+                startActivity(intent);
+                return true;
+
+        }return super.onOptionsItemSelected(item);
     }
 
     public CardModel createCard(int i){

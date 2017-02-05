@@ -1,9 +1,3 @@
-<FrameLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
-
-
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -120,34 +114,47 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_gravity="center_horizontal"
+            android:weightSum="1"
             >
 
             <TextView
                 android:id="@+id/dineout_locations_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:text="Locations"
+                android:layout_weight="0.33"
+                android:background="@drawable/rounded_pressed"
                 android:paddingRight="5dp"
+                android:textColor="#fff"
+                android:gravity="center"
                 android:paddingLeft="5dp"/>
 
             <TextView
+                android:layout_weight="0.33"
                 android:id="@+id/dineout_cuisines_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Cuisines"
+                android:background="@drawable/rounded_corners"
+                android:gravity="center"
                 android:paddingRight="5dp"
                 android:paddingLeft="5dp"/>
 
             <TextView
+                android:layout_weight="0.33"
+                android:gravity="center"
                 android:id="@+id/dineout_collections_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Collections"
+                android:background="@drawable/rounded_corners"
                 android:paddingRight="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="end"
                 android:paddingLeft="5dp"/>
         </LinearLayout>
 
@@ -196,7 +203,3 @@
     </LinearLayout>
 </ScrollView>
 
-    <include layout="@layout/filters_button"
-        android:id="@+id/dineout_filter" />
-
-    </FrameLayout>

@@ -8,10 +8,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.activities.DineoutFilter;
@@ -23,7 +25,6 @@ import com.example.android.wednesday.adapters.FeaturedDineoutAdapter;
 import com.example.android.wednesday.adapters.TopPicksDineoutAdapter;
 import com.example.android.wednesday.models.CardModel;
 import com.example.android.wednesday.models.CategoryModel;
-import com.google.firebase.database.ValueEventListener;
 import com.lsjwzh.widget.recyclerviewpager.LoopRecyclerViewPager;
 
 import java.util.ArrayList;
@@ -96,6 +97,7 @@ public class DineOutTabFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -104,15 +106,6 @@ public class DineOutTabFragment extends Fragment {
         // Inflate the layout for this fragment
         final View rootView =  inflater.inflate(R.layout.fragment_dine_out, container, false);
 
-        FrameLayout dineoutFilterFrame = (FrameLayout) rootView.findViewById(R.id.dineout_filter);
-        Button dineoutFilter = (Button) dineoutFilterFrame.findViewById(R.id.f_button);
-        dineoutFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), DineoutFilter.class);
-                startActivity(intent);
-            }
-        });
 
         mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks_dineout);
         mRecyclerViewTopPicks = (RecyclerView) rootView.findViewById(R.id.top_picks_dineout);
@@ -197,6 +190,10 @@ public class DineOutTabFragment extends Fragment {
         dineoutLocationsRecyclerView.setNestedScrollingEnabled(false);
         dineoutCuisinesRecyclerView.setNestedScrollingEnabled(false);
         dineoutCollectionsRecyclerView.setNestedScrollingEnabled(false);
+       final TextView button1 = (TextView) rootView.findViewById(R.id.dineout_locations_button);
+        final TextView button2 = (TextView) rootView.findViewById(R.id.dineout_cuisines_button);
+        final TextView button3 = (TextView) rootView.findViewById(R.id.dineout_collections_button);
+
 
 
 
@@ -205,6 +202,14 @@ public class DineOutTabFragment extends Fragment {
             public void onClick(View view) {
                 if(locationList.isEmpty()){
                     createLocationList();
+                    button1.setBackgroundResource(R.drawable.rounded_pressed);
+                    button2.setBackgroundResource(R.drawable.rounded_corners);
+                    button3.setBackgroundResource(R.drawable.rounded_corners);
+
+                    button1.setTextColor(getResources().getColor(android.R.color.white));
+                    button2.setTextColor(getResources().getColor(android.R.color.black));
+                    button3.setTextColor(getResources().getColor(android.R.color.black));
+
                     dineoutLocationsGridAdapter = new DineoutLocationsGridAdapter(getContext(), locationList);
                     dineoutLocationsRecyclerView.setAdapter(dineoutLocationsGridAdapter);
                     cuisineList.clear();
@@ -226,6 +231,14 @@ public class DineOutTabFragment extends Fragment {
             public void onClick(View view) {
                 if(cuisineList.isEmpty()){
                     createCuisineList();
+                    button2.setBackgroundResource(R.drawable.rounded_pressed);
+                    button1.setBackgroundResource(R.drawable.rounded_corners);
+                    button3.setBackgroundResource(R.drawable.rounded_corners);
+
+                    button2.setTextColor(getResources().getColor(android.R.color.white));
+                    button1.setTextColor(getResources().getColor(android.R.color.black));
+                    button3.setTextColor(getResources().getColor(android.R.color.black));
+
                     dineoutCuisinesGridAdapter = new DineoutCuisinesGridAdapter(getContext(), cuisineList);
                     dineoutCuisinesRecyclerView.setAdapter(dineoutCuisinesGridAdapter);
                     locationList.clear();
@@ -242,6 +255,14 @@ public class DineOutTabFragment extends Fragment {
             public void onClick(View view) {
                 if(collectionsList.isEmpty()){
                     createCollectionsList();
+                    button3.setBackgroundResource(R.drawable.rounded_pressed);
+                    button2.setBackgroundResource(R.drawable.rounded_corners);
+                    button1.setBackgroundResource(R.drawable.rounded_corners);
+
+                    button3.setTextColor(getResources().getColor(android.R.color.white));
+                    button2.setTextColor(getResources().getColor(android.R.color.black));
+                    button1.setTextColor(getResources().getColor(android.R.color.black));
+
                     dineoutCollectionsGridAdapter = new DineoutCollectionsGridAdapter(getContext(), collectionsList);
                     dineoutCollectionsRecyclerView.setAdapter(dineoutCollectionsGridAdapter);
                     cuisineList.clear();
@@ -261,6 +282,26 @@ public class DineOutTabFragment extends Fragment {
         return rootView;
 
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu2, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+
+            case R.id.filters:
+                Intent intent = new Intent(getContext(), DineoutFilter.class);
+                startActivity(intent);
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     public void onPause() {
         super.onPause();

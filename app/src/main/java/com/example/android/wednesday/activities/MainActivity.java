@@ -2,6 +2,7 @@ package com.example.android.wednesday.activities;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -15,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -80,16 +82,31 @@ public class MainActivity extends AppCompatActivity  {
         LocationManager locationManager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new MyLocationListener();
-        boolean flag = displayGpsStatus();
-        if(flag) {
+
+        boolean gpsIsEnabled = locationManager
+                .isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean networkIsEnabled = locationManager
+                .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        if (networkIsEnabled) {
+            try {
+                locationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER, 2000, 500, locationListener);
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+        } else if (gpsIsEnabled) {
             try {
                 locationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER, 2000, 500, locationListener);
             } catch (SecurityException e) {
                 e.printStackTrace();
             }
-
         }
+        else{
+            alertbox("Gps Status!!", "Your GPS is: OFF");
+        }
+
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -174,6 +191,33 @@ public class MainActivity extends AppCompatActivity  {
             }
             return null;
         }
+    }
+
+    protected void alertbox(String title, String mymessage) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your Device's GPS is Disable")
+                .setCancelable(false)
+                .setTitle("** Gps Status **")
+                .setPositiveButton("Gps On",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // finish the current activity
+                                // AlertBoxAdvance.this.finish();
+                                Intent myIntent = new Intent(
+                                        Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(myIntent);
+                                dialog.cancel();
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // cancel the dialog box
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     public class MyLocationListener implements LocationListener {
