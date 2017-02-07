@@ -6,25 +6,34 @@ package com.example.android.wednesday.models;
 
 public class EventModel {
 
+    String eventName;
     String eventPlace;
     String eventCost;
-    String eventHighlights;
+    String eventFirstHighlight;
+    String eventSecondHighlight;
+    String eventThirdHighlight;
     String eventAbout;
     String eventStartTime;
     String eventEndTime;
+    String eventStags;
     String eventArtist;
     String eventOffers;
 
-    public EventModel(String eventPlace, String eventCost,
+    public EventModel(String eventName, String eventPlace, String eventCost,
                       String eventStartTime, String eventEndTime, String eventArtist,
-                      String eventHighlights, String eventAbout, String eventOffers){
+                      String eventAbout, String eventOffers, String eventFirstHighlight, String eventSecondHighlight, String eventThirdHighlight,
+                      String eventStags){
 
+        this.eventStags = eventStags;
+        this.eventName = eventName;
         this.eventPlace = eventPlace;
         this.eventCost = eventCost;
         this.eventArtist = eventArtist;
         this.eventStartTime = eventStartTime;
         this.eventEndTime = eventEndTime;
-        this.eventHighlights = eventHighlights;
+        this.eventFirstHighlight = eventFirstHighlight;
+        this.eventSecondHighlight = eventSecondHighlight;
+        this.eventThirdHighlight = eventThirdHighlight;
         this.eventAbout = eventAbout;
         this.eventOffers = eventOffers;
     }

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_event"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:orientation="vertical"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.android.wednesday.activities.AddEvent">
+
+    <EditText
+        android:id="@+id/add_event_name"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:hint="Event Name"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:text="Select Category"/>
+
+    <RadioGroup
+        android:id="@+id/event_categories_group"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <RadioButton
+        android:id="@+id/bandsandsingers"
+        android:tag="bandsandsingers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bands and Singers"/>
+    <RadioButton
+        android:tag="comedy"
+        android:id="@+id/comedy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Comedy"/>
+    <RadioButton
+        android:tag="karaoke"
+        android:id="@+id/karaoke"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Karaoke"/>
+    <RadioButton
+        android:tag="djnight"
+        android:id="@+id/djnight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DJ Night"/>
+
+    <RadioButton
+        android:tag="artsandtheatre"
+        android:id="@+id/artsandtheatre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Arts and Theatre"/>
+
+    <RadioButton
+        android:tag="ladiesnight"
+        android:id="@+id/ladiesnight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ladies Nights"/>
+
+    <RadioButton
+        android:tag="collegefestivals"
+        android:id="@+id/collegefestivals"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="College Festivals"/>
+
+    <RadioButton
+        android:tag="workshopsandseminars"
+        android:id="@+id/workshopsnadseminars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Workshops and Seminars"/>
+    <RadioButton
+        android:tag="sports"
+        android:id="@+id/sports"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sports"/>
+
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/add_event_address"
+        android:layout_width="300dp"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:hint="Event Address"/>
+
+    <EditText
+        android:id="@+id/add_event_cost_for_two"
+        android:layout_width="300dp"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:hint="Cost for 2"/>
+
+    <EditText
+        android:id="@+id/add_event_artist_name"
+        android:layout_width="300dp"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:hint="Artist Name"/>
+
+    <EditText
+        android:id="@+id/add_event_starttime"
+        android:layout_width="300dp"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:hint="Start Time"/>
+
+    <EditText
+        android:id="@+id/add_event_endtime"
+        android:layout_width="300dp"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:hint="End Time"/>
+
+    <EditText
+        android:id="@+id/add_event_stags"
+        android:layout_width="300dp"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:hint="Stags Allowed?"/>
+
+
+    <EditText
+        android:id="@+id/add_event_first_highlight"
+        android:layout_width="300dp"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:hint="Highlight 1"/>
+
+    <EditText
+        android:id="@+id/add_event_second_highlight"
+        android:layout_width="300dp"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:hint="Highlight 2"/>
+
+    <EditText
+        android:id="@+id/add_event_third_highlight"
+        android:layout_width="300dp"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:hint="Highlight 3"/>
+
+    <EditText
+        android:id="@+id/add_event_about"
+        android:layout_width="300dp"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:hint="About"/>
+
+    <EditText
+        android:id="@+id/add_event_offers"
+        android:layout_width="300dp"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:hint="Offers"/>
+
+<Button
+    android:id="@+id/add_event_to_database_button"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Add Event"
+    android:background="#000"/>
+</LinearLayout>
+</ScrollView>

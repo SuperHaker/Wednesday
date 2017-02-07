@@ -22,6 +22,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug{
+            debuggable true
+        }
     }
 }
 
@@ -51,6 +54,7 @@ dependencies {
     compile 'com.appeaser.sublimepickerlibrary:sublimepickerlibrary:2.1.1'
     compile 'me.relex:circleindicator:1.2.2@aar'
     compile 'com.squareup.picasso:picasso:2.5.2'
+
 
 
 

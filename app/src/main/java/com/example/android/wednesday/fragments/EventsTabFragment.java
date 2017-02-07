@@ -1,6 +1,7 @@
 package com.example.android.wednesday.fragments;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -136,26 +137,9 @@ public class EventsTabFragment extends Fragment {
 
 
           categorySource = new ArrayList<>();
-        valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                    Log.v("Ye raha", "" + childDataSnapshot.getKey()); //displays the key for the node
-                    Log.v("Ye raha", "" + childDataSnapshot.child("categoryName").getValue());
-                    CategoryModel model = childDataSnapshot.getValue(CategoryModel.class);
-                    categorySource.add(model);
-                    gridAdapter.notifyDataSetChanged(); //gives the value for given keyname
 
-                }
-            }
+        attachDatabaseReadListener();
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        } ;
-
-        mDatabaseReference.addValueEventListener(valueEventListener);
 
 
         mGridManager = new GridLayoutManager(getContext(), 2);
@@ -209,6 +193,49 @@ public class EventsTabFragment extends Fragment {
         return  new CardModel("The Drunk House " + Integer.toString(i), "Rajouri", "1000");
     }
 
+    private void attachDatabaseReadListener(){
+        if(valueEventListener == null) {
+            valueEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                        Log.v("Ye raha", "" + childDataSnapshot.getKey()); //displays the key for the node
+                        Log.v("Ye raha", "" + childDataSnapshot.child("categoryName").getValue());
+                        CategoryModel model = childDataSnapshot.getValue(CategoryModel.class);
+                        categorySource.add(model);
+                        gridAdapter.notifyDataSetChanged(); //gives the value for given keyname
+
+                    }
+                }
 
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+
+            };
+            mDatabaseReference.addValueEventListener(valueEventListener);
+
+        }
+    }
+
+    private void detachDatabaseReadListener(){
+        if(valueEventListener != null){
+            mDatabaseReference.removeEventListener(valueEventListener);
+            valueEventListener = null;
+        }
+    }
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        detachDatabaseReadListener();
+    }
 }
