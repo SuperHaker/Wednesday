@@ -17,6 +17,7 @@
 
     <EditText
         android:id="@+id/add_event_name"
+        android:textColor="#000"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -99,6 +100,7 @@
     <EditText
         android:id="@+id/add_event_address"
         android:layout_width="300dp"
+        android:textColor="#000"
         android:layout_margin="5dp"
         android:layout_height="wrap_content"
         android:hint="Event Address"/>
@@ -107,6 +109,8 @@
         android:id="@+id/add_event_cost_for_two"
         android:layout_width="300dp"
         android:layout_margin="5dp"
+        android:textColor="#000"
+
         android:layout_height="wrap_content"
         android:hint="Cost for 2"/>
 
@@ -114,6 +118,8 @@
         android:id="@+id/add_event_artist_name"
         android:layout_width="300dp"
         android:layout_margin="5dp"
+        android:textColor="#000"
+
         android:layout_height="wrap_content"
         android:hint="Artist Name"/>
 
@@ -121,6 +127,8 @@
         android:id="@+id/add_event_starttime"
         android:layout_width="300dp"
         android:layout_margin="5dp"
+        android:textColor="#000"
+
         android:layout_height="wrap_content"
         android:hint="Start Time"/>
 
@@ -128,6 +136,8 @@
         android:id="@+id/add_event_endtime"
         android:layout_width="300dp"
         android:layout_margin="5dp"
+        android:textColor="#000"
+
         android:layout_height="wrap_content"
         android:hint="End Time"/>
 
@@ -135,12 +145,14 @@
         android:id="@+id/add_event_stags"
         android:layout_width="300dp"
         android:layout_margin="5dp"
+        android:textColor="#000"
         android:layout_height="wrap_content"
         android:hint="Stags Allowed?"/>
 
 
     <EditText
         android:id="@+id/add_event_first_highlight"
+        android:textColor="#000"
         android:layout_width="300dp"
         android:layout_margin="5dp"
         android:layout_height="wrap_content"
@@ -150,12 +162,14 @@
         android:id="@+id/add_event_second_highlight"
         android:layout_width="300dp"
         android:layout_margin="5dp"
+        android:textColor="#000"
         android:layout_height="wrap_content"
         android:hint="Highlight 2"/>
 
     <EditText
         android:id="@+id/add_event_third_highlight"
         android:layout_width="300dp"
+        android:textColor="#000"
         android:layout_margin="5dp"
         android:layout_height="wrap_content"
         android:hint="Highlight 3"/>
@@ -164,6 +178,7 @@
         android:id="@+id/add_event_about"
         android:layout_width="300dp"
         android:layout_margin="5dp"
+        android:textColor="#000"
         android:layout_height="wrap_content"
         android:hint="About"/>
 
@@ -171,6 +186,7 @@
         android:id="@+id/add_event_offers"
         android:layout_width="300dp"
         android:layout_margin="5dp"
+        android:textColor="#000"
         android:layout_height="wrap_content"
         android:hint="Offers"/>
 

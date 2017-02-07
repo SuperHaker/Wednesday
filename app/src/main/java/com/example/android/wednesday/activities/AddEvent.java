@@ -1,11 +1,13 @@
 package com.example.android.wednesday.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.models.EventModel;
@@ -72,6 +74,8 @@ public class AddEvent extends AppCompatActivity {
                         addEventAbout.getText().toString(), addEventOffers.getText().toString(), addEventFirstHighlight.getText().toString(),
                         addEventSecondHighlight.getText().toString(), addEventThirdHighlight.getText().toString(), addEventStags.getText().toString());
                 mDatabase.push().setValue(eventModel);
+                Toast.makeText(getApplicationContext(), "Event added to Database", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
             }
         });

@@ -1,7 +1,6 @@
 package com.example.android.wednesday.fragments;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -168,6 +167,7 @@ public class EventsTabFragment extends Fragment {
     public void onPause() {
         super.onPause();
         handler.removeCallbacks(runnable);
+        detachDatabaseReadListener();
     }
 
     @Override
@@ -198,6 +198,7 @@ public class EventsTabFragment extends Fragment {
             valueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    categorySource.clear();
                     for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
                         Log.v("Ye raha", "" + childDataSnapshot.getKey()); //displays the key for the node
                         Log.v("Ye raha", "" + childDataSnapshot.child("categoryName").getValue());
@@ -227,15 +228,4 @@ public class EventsTabFragment extends Fragment {
         }
     }
 
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        detachDatabaseReadListener();
-    }
 }
