@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,11 +17,16 @@ import android.view.ViewGroup;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.activities.ActivitiesFilter;
-import com.example.android.wednesday.adapters.ActivityGridAdapter;
 import com.example.android.wednesday.adapters.FeaturedActivitiesAdapter;
+import com.example.android.wednesday.adapters.GridAdapter;
 import com.example.android.wednesday.adapters.TopPicksActivitiesAdapter;
 import com.example.android.wednesday.models.CardModel;
 import com.example.android.wednesday.models.CategoryModel;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.lsjwzh.widget.recyclerviewpager.LoopRecyclerViewPager;
 
 import java.util.ArrayList;
@@ -46,11 +52,13 @@ public class ActivitiesTabFragment extends Fragment {
     private TopPicksActivitiesAdapter mTopPicksAdapter;
     private RecyclerView.LayoutManager mLayoutManagerFeatured;
     private RecyclerView.LayoutManager mLayoutManagerTopPicks;
-
+    GridAdapter gridAdapter;
     private Handler handler;
     private Runnable runnable;
     final int speedScroll = 2000;
-
+    ValueEventListener valueEventListener;
+    private DatabaseReference mDatabaseReference;
+    List<CategoryModel> categorySource;
 
     GridLayoutManager mGridManager;
 
@@ -96,7 +104,7 @@ public class ActivitiesTabFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_tab_two, container, false);
-
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference("activities").child("categories");
         mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks_activities);
         mRecyclerViewTopPicks = (RecyclerView) rootView.findViewById(R.id.top_picks_activities);
         mRecyclerViewTopPicks.setHasFixedSize(true);
@@ -132,18 +140,16 @@ public class ActivitiesTabFragment extends Fragment {
         };
 
 
-        List<CategoryModel> categorySource = new ArrayList<>();
+        categorySource = new ArrayList<>();
 
-        for(int i = 0;i < 10; i++){
-            categorySource.add(createCategory());
-        }
+        attachDatabaseReadListener();
 
         mGridManager = new GridLayoutManager(getContext(), 2);
         RecyclerView categoryRecyclerView = (RecyclerView) rootView.findViewById(R.id.categories_activities);
         categoryRecyclerView.setHasFixedSize(true);
         categoryRecyclerView.setLayoutManager(mGridManager);
 
-        ActivityGridAdapter gridAdapter = new ActivityGridAdapter(getContext(), categorySource);
+        gridAdapter = new GridAdapter(getContext(), categorySource, 2);
         categoryRecyclerView.setAdapter(gridAdapter);
         categoryRecyclerView.setNestedScrollingEnabled(false);
 
@@ -173,6 +179,7 @@ public class ActivitiesTabFragment extends Fragment {
     public void onPause() {
         super.onPause();
         handler.removeCallbacks(runnable);
+        detachDatabaseReadListener();
     }
 
     @Override
@@ -188,10 +195,41 @@ public class ActivitiesTabFragment extends Fragment {
         return  new CardModel("Random Lake " + Integer.toString(i), "Kasol", "Cost");
     }
 
-    public CategoryModel createCategory(){
-        return new CategoryModel("Category");
+    private void attachDatabaseReadListener(){
+        if(valueEventListener == null) {
+            valueEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    categorySource.clear();
+                    for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                        Log.v("Ye raha", "" + childDataSnapshot.getKey()); //displays the key for the node
+                        Log.v("Ye raha", "" + childDataSnapshot.child("categoryName").getValue());
+                        CategoryModel model = childDataSnapshot.getValue(CategoryModel.class);
+                        categorySource.add(model);
+                        gridAdapter.notifyDataSetChanged(); //gives the value for given keyname
+
+                    }
+                }
+
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+
+            };
+            mDatabaseReference.addValueEventListener(valueEventListener);
+
+        }
     }
+
+    private void detachDatabaseReadListener(){
+        if(valueEventListener != null){
+            mDatabaseReference.removeEventListener(valueEventListener);
+            valueEventListener = null;
+        }
     }
+}
 
 
 

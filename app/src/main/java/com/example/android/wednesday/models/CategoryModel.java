@@ -10,21 +10,18 @@ public class CategoryModel implements Serializable{
 
     public String categoryName;
     public String categoryPhoto;
-    public EventModel eventModel;
 
-    public CategoryModel(){
+    public CategoryModel(){}
 
-    }
 
     public CategoryModel(String categoryName){
         this.categoryName = categoryName;
 
     }
 
-    public CategoryModel(String categoryName, String categoryPhoto, EventModel eventModel){
+    public CategoryModel(String categoryName, String categoryPhoto){
         this.categoryName = categoryName;
         this.categoryPhoto = categoryPhoto;
-        this.eventModel = eventModel;
     }
 
 }

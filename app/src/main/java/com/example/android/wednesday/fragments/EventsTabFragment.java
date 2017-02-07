@@ -146,7 +146,7 @@ public class EventsTabFragment extends Fragment {
         categoryRecyclerView.setHasFixedSize(true);
         categoryRecyclerView.setLayoutManager(mGridManager);
 
-        gridAdapter = new GridAdapter(getContext(), categorySource);
+        gridAdapter = new GridAdapter(getContext(), categorySource, 1);
         categoryRecyclerView.setAdapter(gridAdapter);
         categoryRecyclerView.setNestedScrollingEnabled(false);
 

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,12 +20,17 @@ import com.example.android.wednesday.R;
 import com.example.android.wednesday.activities.DineoutFilter;
 import com.example.android.wednesday.adapters.DineoutCollectionsGridAdapter;
 import com.example.android.wednesday.adapters.DineoutCuisinesGridAdapter;
-import com.example.android.wednesday.adapters.DineoutGridAdapter;
 import com.example.android.wednesday.adapters.DineoutLocationsGridAdapter;
 import com.example.android.wednesday.adapters.FeaturedDineoutAdapter;
+import com.example.android.wednesday.adapters.GridAdapter;
 import com.example.android.wednesday.adapters.TopPicksDineoutAdapter;
 import com.example.android.wednesday.models.CardModel;
 import com.example.android.wednesday.models.CategoryModel;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.lsjwzh.widget.recyclerviewpager.LoopRecyclerViewPager;
 
 import java.util.ArrayList;
@@ -58,9 +64,12 @@ public class DineOutTabFragment extends Fragment {
     private DineoutLocationsGridAdapter dineoutLocationsGridAdapter;
     private DineoutCuisinesGridAdapter dineoutCuisinesGridAdapter;
     private DineoutCollectionsGridAdapter dineoutCollectionsGridAdapter;
+    List<CategoryModel> categorySource;
 
     private RecyclerView.LayoutManager mLayoutManagerFeatured;
     private RecyclerView.LayoutManager mLayoutManagerTopPicks;
+
+    GridAdapter gridAdapter;
 
     private Handler handler;
     private Runnable runnable;
@@ -74,6 +83,8 @@ public class DineOutTabFragment extends Fragment {
     List<CategoryModel> locationList = new ArrayList<>();
     List<CategoryModel> cuisineList = new ArrayList<>();
     List<CategoryModel> collectionsList = new ArrayList<>();
+    ValueEventListener valueEventListener;
+    private DatabaseReference mDatabaseReference;
 
 
 
@@ -105,7 +116,7 @@ public class DineOutTabFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View rootView =  inflater.inflate(R.layout.fragment_dine_out, container, false);
-
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference("dineouts").child("categories");
 
         mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks_dineout);
         mRecyclerViewTopPicks = (RecyclerView) rootView.findViewById(R.id.top_picks_dineout);
@@ -140,14 +151,9 @@ public class DineOutTabFragment extends Fragment {
             }
         };
 
-        List<CategoryModel> categorySource = new ArrayList<>();
+         categorySource = new ArrayList<>();
 
-        for(int i = 0;i < 10; i++){
-            categorySource.add(createCategory());
-        }
-
-
-
+       attachDatabaseReadListener();
 
         mGridManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager = new GridLayoutManager(getContext(), 2);
@@ -168,7 +174,7 @@ public class DineOutTabFragment extends Fragment {
         dineoutCuisinesRecyclerView.setLayoutManager(gridLayoutManager2);
         dineoutCollectionsRecyclerView.setLayoutManager(gridLayoutManager3);
 
-        DineoutGridAdapter gridAdapter = new DineoutGridAdapter(getContext(), categorySource);
+        gridAdapter = new GridAdapter(getContext(), categorySource,3);
         categoryRecyclerView.setAdapter(gridAdapter);
         categoryRecyclerView.setNestedScrollingEnabled(false);
 
@@ -306,6 +312,7 @@ public class DineOutTabFragment extends Fragment {
     public void onPause() {
         super.onPause();
         handler.removeCallbacks(runnable);
+        detachDatabaseReadListener();
     }
 
     @Override
@@ -354,6 +361,41 @@ public class DineOutTabFragment extends Fragment {
 
     public CategoryModel createCollection(){
         return new CategoryModel("Collection");
+    }
+
+    private void attachDatabaseReadListener(){
+        if(valueEventListener == null) {
+            valueEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    categorySource.clear();
+                    for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                        Log.v("Ye raha", "" + childDataSnapshot.getKey()); //displays the key for the node
+                        Log.v("Ye raha", "" + childDataSnapshot.child("categoryName").getValue());
+                        CategoryModel model = childDataSnapshot.getValue(CategoryModel.class);
+                        categorySource.add(model);
+                        gridAdapter.notifyDataSetChanged(); //gives the value for given keyname
+
+                    }
+                }
+
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+
+            };
+            mDatabaseReference.addValueEventListener(valueEventListener);
+
+        }
+    }
+
+    private void detachDatabaseReadListener(){
+        if(valueEventListener != null){
+            mDatabaseReference.removeEventListener(valueEventListener);
+            valueEventListener = null;
+        }
     }
 
 }
