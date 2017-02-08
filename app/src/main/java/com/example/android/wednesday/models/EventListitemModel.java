@@ -8,16 +8,16 @@ public class EventListitemModel {
 
     public String eventName;
     public String eventPlace;
-    public String eventDate;
+    public String eventCost;
 
 
     public EventListitemModel() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public EventListitemModel(String name, String place, String date) {
-        this.eventName = name;
-        this.eventPlace = place;
-        this.eventDate = date;
+    public EventListitemModel(String eventName, String eventPlace, String eventCost) {
+        this.eventName = eventName;
+        this.eventPlace = eventPlace;
+        this.eventCost = eventCost;
     }
 }

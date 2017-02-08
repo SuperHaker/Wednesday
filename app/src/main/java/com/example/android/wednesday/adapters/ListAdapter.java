@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.activities.EventDetailsActivity;
@@ -41,6 +42,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.EventListViewH
 
     @Override
     public void onBindViewHolder(ListAdapter.EventListViewHolder holder, int position) {
+        EventListitemModel currentCard = dataSource.get(position);
+        holder.eventName.setText(currentCard.eventName);
+        holder.eventPlace.setText(currentCard.eventPlace);
+        holder.eventCost.setText(currentCard.eventCost);
 
     }
 
@@ -50,13 +55,18 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.EventListViewH
     }
 
     class EventListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-
+        TextView eventName;
+        TextView eventPlace;
+        TextView eventCost;
         ImageView heartEvent;
         private Context context;
         public EventListViewHolder(Context context, View view){
             super(view);
             this.context = context;
             heartEvent = (ImageView) itemView.findViewById(R.id.favorite);
+            eventName = (TextView) itemView.findViewById(R.id.event_name);
+            eventPlace = (TextView) itemView.findViewById(R.id.event_place);
+            eventCost = (TextView) itemView.findViewById(R.id.event_cost);
             heartEvent.setTag(R.drawable.whiteheart);
             view.setOnClickListener(this);
             heartEvent.setOnClickListener(this);

@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -61,6 +60,7 @@ public class ActivitiesTabFragment extends Fragment {
     List<CategoryModel> categorySource;
 
     GridLayoutManager mGridManager;
+    List<CardModel> dataSource;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -116,7 +116,7 @@ public class ActivitiesTabFragment extends Fragment {
         mLoopRecyclerView.setLayoutManager(mLayoutManagerFeatured);
         mRecyclerViewTopPicks.setLayoutManager(mLayoutManagerTopPicks);
 
-        List<CardModel> dataSource = new ArrayList<CardModel>();
+        dataSource = new ArrayList<CardModel>();
 
 
         for(int i = 0;i<5; i++){
@@ -180,6 +180,7 @@ public class ActivitiesTabFragment extends Fragment {
         super.onPause();
         handler.removeCallbacks(runnable);
         detachDatabaseReadListener();
+
     }
 
     @Override
@@ -202,8 +203,6 @@ public class ActivitiesTabFragment extends Fragment {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     categorySource.clear();
                     for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                        Log.v("Ye raha", "" + childDataSnapshot.getKey()); //displays the key for the node
-                        Log.v("Ye raha", "" + childDataSnapshot.child("categoryName").getValue());
                         CategoryModel model = childDataSnapshot.getValue(CategoryModel.class);
                         categorySource.add(model);
                         gridAdapter.notifyDataSetChanged(); //gives the value for given keyname

@@ -85,8 +85,9 @@ public class GridAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View view) {
                     if(viewType == 1) {
-                        Toast.makeText(context, "Clicked " + Integer.toString(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Clicked " +  dataSource.get(getAdapterPosition()).categoryName, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(context, EventlistActivity.class);
+                        intent.putExtra("categoryClicked", dataSource.get(getAdapterPosition()).categoryName);
                         context.startActivity(intent);
                     }
                     else if(viewType == 2){
@@ -94,7 +95,7 @@ public class GridAdapter extends RecyclerView.Adapter {
                         Intent intent = new Intent(context, ActivitylistActivity.class);
                         context.startActivity(intent);
                     }
-                    else if(viewType ==3){
+                    else if(viewType == 3){
                         Toast.makeText(context, "Clicked " + Integer.toString(getAdapterPosition()), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(context, DineoutlistActivity.class);
                         context.startActivity(intent);

@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,7 +52,7 @@ public class EventsTabFragment extends Fragment {
     ValueEventListener valueEventListener;
     GridAdapter gridAdapter;
 
-
+     List<CardModel> dataSource;
 
     GridLayoutManager mGridManager;
 
@@ -107,7 +106,7 @@ public class EventsTabFragment extends Fragment {
         mLoopRecyclerView.setLayoutManager(mLayoutManagerFeatured);
         mRecyclerViewTopPicks.setLayoutManager(mLayoutManagerTopPicks);
 
-        final List<CardModel> dataSource = new ArrayList<CardModel>();
+        dataSource = new ArrayList<CardModel>();
 
         for(int i = 0;i<5; i++){
             dataSource.add(createCard(i));
@@ -168,6 +167,7 @@ public class EventsTabFragment extends Fragment {
         super.onPause();
         handler.removeCallbacks(runnable);
         detachDatabaseReadListener();
+
     }
 
     @Override
@@ -200,8 +200,6 @@ public class EventsTabFragment extends Fragment {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     categorySource.clear();
                     for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                        Log.v("Ye raha", "" + childDataSnapshot.getKey()); //displays the key for the node
-                        Log.v("Ye raha", "" + childDataSnapshot.child("categoryName").getValue());
                         CategoryModel model = childDataSnapshot.getValue(CategoryModel.class);
                         categorySource.add(model);
                         gridAdapter.notifyDataSetChanged(); //gives the value for given keyname

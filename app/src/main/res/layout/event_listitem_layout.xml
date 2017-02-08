@@ -49,6 +49,7 @@
         android:layout_marginBottom="10dp">
 
     <TextView
+        android:id="@+id/event_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Event Name"
@@ -56,13 +57,15 @@
         android:textSize="14sp"
         android:textStyle="bold"/>
     <TextView
+        android:id="@+id/event_place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Date"
+        android:text="Place"
         android:textColor="#fff"
         android:textStyle="bold"
         android:textSize="14sp"/>
     <TextView
+        android:id="@+id/event_cost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Place"

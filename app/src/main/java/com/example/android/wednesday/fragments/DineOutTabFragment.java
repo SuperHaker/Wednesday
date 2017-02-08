@@ -86,7 +86,7 @@ public class DineOutTabFragment extends Fragment {
     ValueEventListener valueEventListener;
     private DatabaseReference mDatabaseReference;
 
-
+    List<CardModel> dataSource;
 
 
 
@@ -129,8 +129,7 @@ public class DineOutTabFragment extends Fragment {
         mLoopRecyclerView.setLayoutManager(mLayoutManagerFeatured);
         mRecyclerViewTopPicks.setLayoutManager(mLayoutManagerTopPicks);
 
-        List<CardModel> dataSource = new ArrayList<CardModel>();
-
+        dataSource = new ArrayList<CardModel>();
 
         for(int i = 0;i<5; i++){
             dataSource.add(createCard(i));
@@ -177,7 +176,7 @@ public class DineOutTabFragment extends Fragment {
         gridAdapter = new GridAdapter(getContext(), categorySource,3);
         categoryRecyclerView.setAdapter(gridAdapter);
         categoryRecyclerView.setNestedScrollingEnabled(false);
-
+        locationList.clear();
         createLocationList();
         dineoutLocationsGridAdapter = new DineoutLocationsGridAdapter(getContext(), locationList);
         cuisineList.clear();
@@ -313,6 +312,7 @@ public class DineOutTabFragment extends Fragment {
         super.onPause();
         handler.removeCallbacks(runnable);
         detachDatabaseReadListener();
+      
     }
 
     @Override
@@ -370,8 +370,6 @@ public class DineOutTabFragment extends Fragment {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     categorySource.clear();
                     for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                        Log.v("Ye raha", "" + childDataSnapshot.getKey()); //displays the key for the node
-                        Log.v("Ye raha", "" + childDataSnapshot.child("categoryName").getValue());
                         CategoryModel model = childDataSnapshot.getValue(CategoryModel.class);
                         categorySource.add(model);
                         gridAdapter.notifyDataSetChanged(); //gives the value for given keyname
