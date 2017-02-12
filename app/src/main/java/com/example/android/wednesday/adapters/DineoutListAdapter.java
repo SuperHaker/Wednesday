@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.activities.DineoutDetailsActivity;
-import com.example.android.wednesday.models.EventListitemModel;
+import com.example.android.wednesday.models.ListitemModel;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,8 +24,8 @@ public class DineoutListAdapter extends RecyclerView.Adapter<DineoutListAdapter.
 
     private final LayoutInflater inflater;
     private Context context;
-    List<EventListitemModel> dataSource = Collections.EMPTY_LIST;
-    public DineoutListAdapter(Context context, List<EventListitemModel> dataSource){
+    List<ListitemModel> dataSource = Collections.EMPTY_LIST;
+    public DineoutListAdapter(Context context, List<ListitemModel> dataSource){
         inflater = LayoutInflater.from(context);
         this.dataSource = dataSource;
         this.context = context;

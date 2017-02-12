@@ -8,7 +8,7 @@ import android.view.MenuItem;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.adapters.ActivityListAdapter;
-import com.example.android.wednesday.models.EventListitemModel;
+import com.example.android.wednesday.models.ListitemModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class ActivitylistActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         listRecyclerView.setLayoutManager(mLayoutManager);
 
-        List<EventListitemModel> dataSource = new ArrayList<>();
+        List<ListitemModel> dataSource = new ArrayList<>();
 
         for(int i = 0;i<10; i++){
             dataSource.add(createEventListitem(i));
@@ -39,8 +39,8 @@ public class ActivitylistActivity extends AppCompatActivity {
         listRecyclerView.setAdapter(listAdapter);
     }
 
-    public EventListitemModel createEventListitem(int i){
-        return new EventListitemModel("Activity Name" + Integer.toString(i), "Place", "Date");
+    public ListitemModel createEventListitem(int i){
+        return new ListitemModel("Activity Name" + Integer.toString(i), "Place", "Date");
     }
 
     @Override

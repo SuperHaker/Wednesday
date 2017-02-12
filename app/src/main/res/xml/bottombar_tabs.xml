@@ -1,0 +1,25 @@
+<tabs>
+    <tab
+        id="@+id/tab_events"
+        title="Events"
+        icon="@drawable/ic_walk_black_24dp"/>
+    <tab
+        id="@+id/tab_travel"
+        title="Travel"
+        icon="@drawable/ic_airplane_black_24dp"/>
+
+    <tab
+        id="@+id/tab_plan"
+        title="Plan"
+        icon="@drawable/ic_format_list_checks_black_24dp"/>
+
+    <tab
+        id="@+id/tab_ask_now"
+        title="Ask Now"
+        icon = "@drawable/ic_comment_question_outline_black_24dp"/>
+
+    <tab
+        id="@+id/tab_profile"
+        icon="@drawable/ic_account_black_24dp"
+        title="Profile" />
+</tabs>

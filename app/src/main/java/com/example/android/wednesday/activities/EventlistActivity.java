@@ -10,7 +10,7 @@ import android.view.MenuItem;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.adapters.ListAdapter;
-import com.example.android.wednesday.models.EventListitemModel;
+import com.example.android.wednesday.models.EventModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +31,7 @@ public class EventlistActivity extends AppCompatActivity {
     ValueEventListener valueEventListener;
     String node;
 
-    List<EventListitemModel> dataSource;
+    List<EventModel> dataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +72,7 @@ public class EventlistActivity extends AppCompatActivity {
 
 
 //        for(int i = 0; i<10;i++){
-//            dataSource.add(new EventListitemModel("Event Name", "Place", "100"));
+//            dataSource.add(new ListitemModel("Event Name", "Place", "100"));
 //        }
 
 
@@ -99,7 +99,7 @@ public class EventlistActivity extends AppCompatActivity {
                     for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
 //                        Log.v("Ye raha", "" + childDataSnapshot.getKey()); //displays the key for the node
 //                        Log.v("Ye raha", "" + childDataSnapshot.child("eventName").getValue());
-                        EventListitemModel model = childDataSnapshot.getValue(EventListitemModel.class);
+                        EventModel model = childDataSnapshot.getValue(EventModel.class);
                         dataSource.add(model);
                         listAdapter.notifyDataSetChanged(); //gives the value for given keyname
 
@@ -115,7 +115,7 @@ public class EventlistActivity extends AppCompatActivity {
             };
 //            Log.v("Ye le", node);
             databaseReference.addValueEventListener(valueEventListener);
-            listAdapter = new ListAdapter(this, dataSource);
+            listAdapter = new ListAdapter(this, dataSource, 1);
             listRecyclerView.setAdapter(listAdapter);
 
         }

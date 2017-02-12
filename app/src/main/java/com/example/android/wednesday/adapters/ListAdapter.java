@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.activities.EventDetailsActivity;
-import com.example.android.wednesday.models.EventListitemModel;
+import com.example.android.wednesday.models.EventModel;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,27 +25,40 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.EventListViewH
 
     private final LayoutInflater inflater;
     private Context context;
-    List<EventListitemModel> dataSource = Collections.EMPTY_LIST;
-    public ListAdapter(Context context, List<EventListitemModel> dataSource){
+    int type;
+    List<EventModel> dataSource = Collections.EMPTY_LIST;
+
+    public ListAdapter(Context context, List<EventModel> dataSource, int layoutType){
         inflater = LayoutInflater.from(context);
         this.dataSource = dataSource;
         this.context = context;
+        type = layoutType;
 
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return type;
     }
 
     @Override
     public ListAdapter.EventListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.event_listitem_layout, parent, false);
-        ListAdapter.EventListViewHolder listViewHolder = new ListAdapter.EventListViewHolder(context, view);
-        return listViewHolder;
+        View view = null;
+        if(viewType == 1) {
+             view = inflater.inflate(R.layout.event_listitem_layout, parent, false);
+        }
+
+
+        return new ListAdapter.EventListViewHolder(context, view, viewType);
+
     }
 
     @Override
     public void onBindViewHolder(ListAdapter.EventListViewHolder holder, int position) {
-        EventListitemModel currentCard = dataSource.get(position);
-        holder.eventName.setText(currentCard.eventName);
-        holder.eventPlace.setText(currentCard.eventPlace);
-        holder.eventCost.setText(currentCard.eventCost);
+        EventModel currentCard = dataSource.get(position);
+        holder.name.setText(currentCard.eventName);
+        holder.place.setText(currentCard.eventPlace);
+        holder.cost.setText(currentCard.eventCost);
 
     }
 
@@ -54,41 +67,48 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.EventListViewH
         return dataSource.size();
     }
 
-    class EventListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView eventName;
-        TextView eventPlace;
-        TextView eventCost;
+    class EventListViewHolder extends RecyclerView.ViewHolder{
+        TextView name;
+        TextView place;
+        TextView cost;
         ImageView heartEvent;
         private Context context;
-        public EventListViewHolder(Context context, View view){
+        public EventListViewHolder(final Context context, View view,final int viewType){
             super(view);
             this.context = context;
             heartEvent = (ImageView) itemView.findViewById(R.id.favorite);
-            eventName = (TextView) itemView.findViewById(R.id.event_name);
-            eventPlace = (TextView) itemView.findViewById(R.id.event_place);
-            eventCost = (TextView) itemView.findViewById(R.id.event_cost);
             heartEvent.setTag(R.drawable.whiteheart);
-            view.setOnClickListener(this);
-            heartEvent.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-
-            if (view.getId() == heartEvent.getId()) {
-                if((Integer)heartEvent.getTag() == R.drawable.whiteheart) {
-                    heartEvent.setImageResource(R.drawable.redheart);
-                    heartEvent.setTag(R.drawable.redheart);
-                }
-                else{
-                    heartEvent.setImageResource(R.drawable.whiteheart);
-                    heartEvent.setTag(R.drawable.whiteheart);
-                }
-            } else {
-                Intent intent = new Intent(context, EventDetailsActivity.class);
-                context.startActivity(intent);
+            if(viewType == 1) {
+                name = (TextView) itemView.findViewById(R.id.event_name);
+                place = (TextView) itemView.findViewById(R.id.event_place);
+                cost = (TextView) itemView.findViewById(R.id.event_cost);
             }
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(viewType == 1){
+                        Intent intent = new Intent(context, EventDetailsActivity.class);
+                        context.startActivity(intent);
+                    }
+
+                }
+            });
+            heartEvent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if((Integer)heartEvent.getTag() == R.drawable.whiteheart) {
+                        heartEvent.setImageResource(R.drawable.redheart);
+                        heartEvent.setTag(R.drawable.redheart);
+                    }
+                    else{
+                        heartEvent.setImageResource(R.drawable.whiteheart);
+                        heartEvent.setTag(R.drawable.whiteheart);
+                    }
+                }
+            });
         }
+
+
     }
 }
 

@@ -19,6 +19,14 @@ public class EventModel{
     public String eventArtist;
     public String eventOffers;
 
+    public EventModel(){}
+
+    public EventModel(String eventName, String eventPlace, String eventCost) {
+        this.eventName = eventName;
+        this.eventPlace = eventPlace;
+        this.eventCost = eventCost;
+    }
+
     public EventModel(String eventName, String eventPlace, String eventCost,
                       String eventStartTime, String eventEndTime, String eventArtist,
                       String eventAbout, String eventOffers, String eventFirstHighlight, String eventSecondHighlight, String eventThirdHighlight,
