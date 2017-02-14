@@ -1,16 +1,20 @@
 package com.example.android.wednesday.activities;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.adapters.MultipleImagesEventsAdapter;
@@ -27,6 +31,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_details);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView artist = (TextView) findViewById(R.id.artist);
         ImageView mapButton = (ImageView) findViewById(R.id.event_map);
         recyclerView = (RecyclerView) findViewById(R.id.images_for_an_event);
         mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -34,6 +39,16 @@ public class EventDetailsActivity extends AppCompatActivity {
         adapter = new MultipleImagesEventsAdapter(getApplicationContext());
         recyclerView.setAdapter(adapter);
         Button button = (Button) findViewById(R.id.book_now_button);
+
+        artist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Dialog dialog = new Dialog(new ContextThemeWrapper(EventDetailsActivity.this, R.style.DialogSlideAnim));
+                dialog.setContentView(R.layout.popup_artist);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
