@@ -97,6 +97,17 @@ public class ActivitiesTabFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         setHasOptionsMenu(true);
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference("activities").child("categories");
+        dataSource = new ArrayList<CardModel>();
+
+
+        for(int i = 0;i<5; i++){
+            dataSource.add(createCard(i));
+        }
+        categorySource = new ArrayList<>();
+
+        attachDatabaseReadListener();
+
     }
 
     @Override
@@ -104,7 +115,6 @@ public class ActivitiesTabFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_tab_two, container, false);
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("activities").child("categories");
         mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks_activities);
         mRecyclerViewTopPicks = (RecyclerView) rootView.findViewById(R.id.top_picks_activities);
         mRecyclerViewTopPicks.setHasFixedSize(true);
@@ -116,12 +126,6 @@ public class ActivitiesTabFragment extends Fragment {
         mLoopRecyclerView.setLayoutManager(mLayoutManagerFeatured);
         mRecyclerViewTopPicks.setLayoutManager(mLayoutManagerTopPicks);
 
-        dataSource = new ArrayList<CardModel>();
-
-
-        for(int i = 0;i<5; i++){
-            dataSource.add(createCard(i));
-        }
 
         mAdapter = new FeaturedActivitiesAdapter(getContext(), dataSource);
         mTopPicksAdapter = new TopPicksActivitiesAdapter(getContext(), dataSource);
@@ -140,9 +144,7 @@ public class ActivitiesTabFragment extends Fragment {
         };
 
 
-        categorySource = new ArrayList<>();
 
-        attachDatabaseReadListener();
 
         mGridManager = new GridLayoutManager(getContext(), 2);
         RecyclerView categoryRecyclerView = (RecyclerView) rootView.findViewById(R.id.categories_activities);

@@ -38,30 +38,23 @@ public class EventsTabFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    final int speedScroll = 2000;
+    CategoryModel model;
+    CategoryModel categoryModel;
+    ValueEventListener valueEventListener;
+    GridAdapter gridAdapter;
+    List<CardModel> dataSource;
+    GridLayoutManager mGridManager;
+    List<CategoryModel> categorySource;
     private RecyclerView mRecyclerViewTopPicks;
     private LoopRecyclerViewPager mLoopRecyclerView;
-    CategoryModel model;
-
     private FeaturedAdapter mAdapter;
     private TopPicksAdapter mTopPicksAdapter;
     private RecyclerView.LayoutManager mLayoutManagerFeatured;
     private RecyclerView.LayoutManager mLayoutManagerTopPicks;
-    private DatabaseReference mDatabaseReference ;
-    CategoryModel categoryModel;
-    ValueEventListener valueEventListener;
-    GridAdapter gridAdapter;
-
-     List<CardModel> dataSource;
-
-    GridLayoutManager mGridManager;
-
-    final int speedScroll = 2000;
+    private DatabaseReference mDatabaseReference;
     private Handler handler;
     private Runnable runnable;
-
-    List<CategoryModel> categorySource;
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -78,11 +71,24 @@ public class EventsTabFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         setHasOptionsMenu(true);
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("events").child("categories");
+
+        dataSource = new ArrayList<CardModel>();
+
+        for (int i = 0; i < 5; i++) {
+            dataSource.add(createCard(i));
+        }
+
+
+
+        categorySource = new ArrayList<>();
+
+        attachDatabaseReadListener();
+
+
+
     }
 
 
@@ -90,8 +96,7 @@ public class EventsTabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =  inflater.inflate(R.layout.fragment_tab_one, container, false);
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("events").child("categories");
+        View rootView = inflater.inflate(R.layout.fragment_tab_one, container, false);
 
 
         mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks);
@@ -106,12 +111,6 @@ public class EventsTabFragment extends Fragment {
         mLoopRecyclerView.setLayoutManager(mLayoutManagerFeatured);
         mRecyclerViewTopPicks.setLayoutManager(mLayoutManagerTopPicks);
 
-        dataSource = new ArrayList<CardModel>();
-
-        for(int i = 0;i<5; i++){
-            dataSource.add(createCard(i));
-        }
-
         mAdapter = new FeaturedAdapter(getContext(), dataSource);
         mTopPicksAdapter = new TopPicksAdapter(getContext(), dataSource);
 
@@ -119,37 +118,25 @@ public class EventsTabFragment extends Fragment {
         mRecyclerViewTopPicks.setAdapter(mTopPicksAdapter);
 
 
-
-
         handler = new Handler();
         runnable = new Runnable() {
             @Override
             public void run() {
-                    mLoopRecyclerView.smoothScrollToPosition(mLoopRecyclerView.getCurrentPosition() + 1);
-                    handler.postDelayed(this,speedScroll);
+                mLoopRecyclerView.smoothScrollToPosition(mLoopRecyclerView.getCurrentPosition() + 1);
+                handler.postDelayed(this, speedScroll);
 
             }
         };
 
-
-
-
-          categorySource = new ArrayList<>();
-
-        attachDatabaseReadListener();
-
-
-
         mGridManager = new GridLayoutManager(getContext(), 2);
+        gridAdapter = new GridAdapter(getContext(), categorySource, 1);
+
         RecyclerView categoryRecyclerView = (RecyclerView) rootView.findViewById(R.id.categories);
         categoryRecyclerView.setHasFixedSize(true);
         categoryRecyclerView.setLayoutManager(mGridManager);
 
-        gridAdapter = new GridAdapter(getContext(), categorySource, 1);
         categoryRecyclerView.setAdapter(gridAdapter);
         categoryRecyclerView.setNestedScrollingEnabled(false);
-
-
 
 
         return rootView;
@@ -158,7 +145,7 @@ public class EventsTabFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        handler.postDelayed(runnable,speedScroll);
+        handler.postDelayed(runnable, speedScroll);
 
     }
 
@@ -173,28 +160,29 @@ public class EventsTabFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-    inflater.inflate(R.menu.menu2, menu);
+        inflater.inflate(R.menu.menu2, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
 
             case R.id.filters:
                 Intent intent = new Intent(getContext(), EventFilter.class);
                 startActivity(intent);
                 return true;
 
-        }return super.onOptionsItemSelected(item);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
-    public CardModel createCard(int i){
+    public CardModel createCard(int i) {
 
-        return  new CardModel("The Drunk House " + Integer.toString(i), "Rajouri", "1000");
+        return new CardModel("The Drunk House " + Integer.toString(i), "Rajouri", "1000");
     }
 
-    private void attachDatabaseReadListener(){
-        if(valueEventListener == null) {
+    private void attachDatabaseReadListener() {
+        if (valueEventListener == null) {
             valueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -219,8 +207,8 @@ public class EventsTabFragment extends Fragment {
         }
     }
 
-    private void detachDatabaseReadListener(){
-        if(valueEventListener != null){
+    private void detachDatabaseReadListener() {
+        if (valueEventListener != null) {
             mDatabaseReference.removeEventListener(valueEventListener);
             valueEventListener = null;
         }

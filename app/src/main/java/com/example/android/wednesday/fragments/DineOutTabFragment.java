@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -109,6 +108,18 @@ public class DineOutTabFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         setHasOptionsMenu(true);
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference("dineouts").child("categories");
+        dataSource = new ArrayList<CardModel>();
+
+        for(int i = 0;i<5; i++){
+            dataSource.add(createCard(i));
+        }
+        categorySource = new ArrayList<>();
+
+        attachDatabaseReadListener();
+
+
+
     }
 
     @Override
@@ -116,7 +127,6 @@ public class DineOutTabFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View rootView =  inflater.inflate(R.layout.fragment_dine_out, container, false);
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("dineouts").child("categories");
 
         mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks_dineout);
         mRecyclerViewTopPicks = (RecyclerView) rootView.findViewById(R.id.top_picks_dineout);
@@ -129,11 +139,6 @@ public class DineOutTabFragment extends Fragment {
         mLoopRecyclerView.setLayoutManager(mLayoutManagerFeatured);
         mRecyclerViewTopPicks.setLayoutManager(mLayoutManagerTopPicks);
 
-        dataSource = new ArrayList<CardModel>();
-
-        for(int i = 0;i<5; i++){
-            dataSource.add(createCard(i));
-        }
 
         mAdapter = new FeaturedDineoutAdapter(getContext(), dataSource);
         mTopPicksAdapter = new TopPicksDineoutAdapter(getContext(), dataSource);
@@ -150,9 +155,7 @@ public class DineOutTabFragment extends Fragment {
             }
         };
 
-         categorySource = new ArrayList<>();
 
-       attachDatabaseReadListener();
 
         mGridManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager = new GridLayoutManager(getContext(), 2);

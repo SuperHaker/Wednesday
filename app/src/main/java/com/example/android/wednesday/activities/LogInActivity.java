@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.wednesday.R;
+import com.example.android.wednesday.fragments.MainEventsFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -100,7 +101,7 @@ public class LogInActivity extends AppCompatActivity {
                                     .LENGTH_LONG).show();
                         }
                         else{
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), MainEventsFragment.class);
                             startActivity(intent);
 
                         }
