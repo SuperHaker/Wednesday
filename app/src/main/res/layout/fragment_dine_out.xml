@@ -24,15 +24,12 @@
             android:layout_marginLeft="8dp"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"/>
-
-
         <com.lsjwzh.widget.recyclerviewpager.LoopRecyclerViewPager
-            android:id="@+id/featured_picks_dineout"
+            android:id="@+id/featured_picks_activities"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
             />
-
 
         <TextView
             android:layout_width="wrap_content"
@@ -82,6 +79,18 @@
                     android:layout_marginLeft="4dp"
                     />
 
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ProgressBar
+                        android:id="@+id/load_categories"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
+
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/categories_dineout"
@@ -93,6 +102,7 @@
                     android:layout_marginBottom="5dp"
 
                     />
+                </FrameLayout>
             </LinearLayout>
 
         </android.support.v7.widget.CardView>

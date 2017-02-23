@@ -48,6 +48,7 @@ public class MainEventsFragment extends Fragment  {
     private ViewPager viewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter = null;
     LayoutInflater inflator;
+    LocationManager locationManager;
 
     TextView currentLocation;
     String cityName = null;
@@ -70,7 +71,7 @@ public class MainEventsFragment extends Fragment  {
         mSectionsPagerAdapter.addFrag(new ActivitiesTabFragment(), "TWO");
         mSectionsPagerAdapter.addFrag(new DineOutTabFragment(), "THREE");
 
-        LocationManager locationManager = (LocationManager)
+        locationManager = (LocationManager)
                 getActivity().getSystemService(Context.LOCATION_SERVICE);
         gcd = new Geocoder(getActivity(), Locale.getDefault());
 
@@ -115,10 +116,7 @@ public class MainEventsFragment extends Fragment  {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
-        if(inflator == null) {
-            inflator = (LayoutInflater) this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        }
-        View v = inflator.inflate(R.layout.location_header, null);
+        View v = inflater.inflate(R.layout.location_header, null);
         toolbar.addView(v);
         currentLocation = (TextView) toolbar.findViewById(R.id.current_location);
 
@@ -288,7 +286,9 @@ public class MainEventsFragment extends Fragment  {
         public void onProviderEnabled(String provider) {}
 
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
     }
     private Boolean displayGpsStatus() {
         ContentResolver contentResolver = getActivity()

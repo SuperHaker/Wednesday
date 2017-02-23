@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.android.wednesday.R;
-import com.example.android.wednesday.fragments.AskNowFragment;
+import com.example.android.wednesday.fragments.MainAskNowFragment;
 import com.example.android.wednesday.fragments.MainEventsFragment;
 import com.example.android.wednesday.fragments.MainPlanFragment;
 import com.example.android.wednesday.fragments.MainProfileFragment;
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements FragNavController
             case TAB_THIRD:
                 return new MainPlanFragment();
             case TAB_FOURTH:
-                return new AskNowFragment();
+                return new MainAskNowFragment();
             case TAB_FIFTH:
                 return new MainProfileFragment();
         }

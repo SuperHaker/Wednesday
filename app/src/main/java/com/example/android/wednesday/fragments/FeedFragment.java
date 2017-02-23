@@ -12,10 +12,10 @@ import com.example.android.wednesday.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AskNowFragment extends Fragment {
+public class FeedFragment extends Fragment {
 
 
-    public AskNowFragment() {
+    public FeedFragment() {
         // Required empty public constructor
     }
 
@@ -24,7 +24,7 @@ public class AskNowFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ask_now, container, false);
+        return inflater.inflate(R.layout.fragment_feed, container, false);
     }
 
 }

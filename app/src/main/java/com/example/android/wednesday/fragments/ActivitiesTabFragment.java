@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.activities.ActivitiesFilter;
@@ -46,6 +47,8 @@ public class ActivitiesTabFragment extends Fragment {
 
     private RecyclerView mRecyclerViewTopPicks;
     private LoopRecyclerViewPager mLoopRecyclerView;
+
+    ProgressBar progressBar;
 
     private FeaturedActivitiesAdapter mAdapter;
     private TopPicksActivitiesAdapter mTopPicksAdapter;
@@ -106,7 +109,6 @@ public class ActivitiesTabFragment extends Fragment {
         }
         categorySource = new ArrayList<>();
 
-        attachDatabaseReadListener();
 
     }
 
@@ -114,11 +116,14 @@ public class ActivitiesTabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =  inflater.inflate(R.layout.fragment_tab_two, container, false);
+        View rootView =  inflater.inflate(R.layout.fragment_activities, container, false);
         mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks_activities);
         mRecyclerViewTopPicks = (RecyclerView) rootView.findViewById(R.id.top_picks_activities);
         mRecyclerViewTopPicks.setHasFixedSize(true);
         mLoopRecyclerView.setHasFixedSize(true);
+        mLoopRecyclerView.setNestedScrollingEnabled(false);
+
+        progressBar = (ProgressBar) rootView.findViewById(R.id.load_categories);
 
         mLayoutManagerFeatured = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         mLayoutManagerTopPicks = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -133,7 +138,14 @@ public class ActivitiesTabFragment extends Fragment {
         mLoopRecyclerView.setAdapter(mAdapter);
         mRecyclerViewTopPicks.setAdapter(mTopPicksAdapter);
 
-         handler = new Handler();
+//         mLoopRecyclerView.post(new Runnable() {
+//             @Override
+//             public void run() {
+//                 mLoopRecyclerView.smoothScrollToPosition(mLoopRecyclerView.getCurrentPosition() + 1);
+//
+//             }
+//         });
+        handler = new Handler();
         runnable = new Runnable() {
             @Override
             public void run() {
@@ -144,6 +156,10 @@ public class ActivitiesTabFragment extends Fragment {
         };
 
 
+        if(valueEventListener == null){
+            attachDatabaseReadListener();
+
+        }
 
 
         mGridManager = new GridLayoutManager(getContext(), 2);
@@ -200,6 +216,7 @@ public class ActivitiesTabFragment extends Fragment {
 
     private void attachDatabaseReadListener(){
         if(valueEventListener == null) {
+            progressBar.setVisibility(View.VISIBLE);
             valueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -210,6 +227,7 @@ public class ActivitiesTabFragment extends Fragment {
                         gridAdapter.notifyDataSetChanged(); //gives the value for given keyname
 
                     }
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
 
 

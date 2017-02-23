@@ -2,12 +2,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.wednesday.fragments.MainProfileFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.android.wednesday.fragments.MainProfileFragment"
+    android:orientation="vertical"
+    android:background="#000">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ImageView
+        android:id="@+id/edit_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_account_edit_white_48dp"
+        android:layout_gravity="right"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="240dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_image"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/user"
+            app:civ_border_width="2dp"
+            app:civ_border_color="#FF000000"/>
+
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textColor="#fff"
+            android:textSize="24sp"
+            />
+
+    </LinearLayout>
+
 
 </FrameLayout>

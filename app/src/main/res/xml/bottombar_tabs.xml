@@ -10,7 +10,7 @@
 
     <tab
         id="@+id/tab_plan"
-        title="Plan"
+        title="Plan it"
         icon="@drawable/ic_format_list_checks_black_24dp"/>
 
     <tab

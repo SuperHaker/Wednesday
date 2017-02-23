@@ -29,11 +29,25 @@
 
 
     <com.lsjwzh.widget.recyclerviewpager.LoopRecyclerViewPager
-        android:id="@+id/featured_picks"
+        android:id="@+id/featured_picks_activities"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         />
+
+    <!--<android.support.v4.view.ViewPager-->
+        <!--android:id="@+id/image_pagerview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
+
+    <cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+
+
 
 
     <TextView
@@ -91,7 +105,17 @@
         android:textColor="#000"
         android:layout_marginLeft="4dp"
         />
+          <FrameLayout
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
 
+          <ProgressBar
+              android:id="@+id/load_categories"
+              style="?android:attr/progressBarStyleLarge"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:visibility="gone" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/categories"
@@ -101,6 +125,7 @@
         android:scrollbars="none"
         android:layout_marginRight="10dp"
         />
+          </FrameLayout>
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

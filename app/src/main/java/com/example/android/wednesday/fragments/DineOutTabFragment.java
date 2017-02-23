@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.wednesday.R;
@@ -84,6 +85,7 @@ public class DineOutTabFragment extends Fragment {
     List<CategoryModel> collectionsList = new ArrayList<>();
     ValueEventListener valueEventListener;
     private DatabaseReference mDatabaseReference;
+    ProgressBar progressBar;
 
     List<CardModel> dataSource;
 
@@ -116,7 +118,6 @@ public class DineOutTabFragment extends Fragment {
         }
         categorySource = new ArrayList<>();
 
-        attachDatabaseReadListener();
 
 
 
@@ -127,11 +128,12 @@ public class DineOutTabFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View rootView =  inflater.inflate(R.layout.fragment_dine_out, container, false);
-
-        mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks_dineout);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.load_categories);
+        mLoopRecyclerView = (LoopRecyclerViewPager) rootView.findViewById(R.id.featured_picks_activities);
         mRecyclerViewTopPicks = (RecyclerView) rootView.findViewById(R.id.top_picks_dineout);
         mRecyclerViewTopPicks.setHasFixedSize(true);
         mLoopRecyclerView.setHasFixedSize(true);
+        mLoopRecyclerView.setNestedScrollingEnabled(false);
 
         mLayoutManagerFeatured = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         mLayoutManagerTopPicks = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -154,9 +156,19 @@ public class DineOutTabFragment extends Fragment {
 
             }
         };
+//        mLoopRecyclerView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                mLoopRecyclerView.smoothScrollToPosition(mLoopRecyclerView.getCurrentPosition() + 1);
+//
+//            }
+//        });
 
 
+        if(valueEventListener == null){
+            attachDatabaseReadListener();
 
+        }
         mGridManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager2 = new GridLayoutManager(getContext(), 2);
@@ -368,6 +380,7 @@ public class DineOutTabFragment extends Fragment {
 
     private void attachDatabaseReadListener(){
         if(valueEventListener == null) {
+            progressBar.setVisibility(View.VISIBLE);
             valueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -378,6 +391,7 @@ public class DineOutTabFragment extends Fragment {
                         gridAdapter.notifyDataSetChanged(); //gives the value for given keyname
 
                     }
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
 
 

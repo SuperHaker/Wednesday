@@ -10,7 +10,6 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.android.wednesday.R;
-import com.example.android.wednesday.fragments.MainEventsFragment;
 import com.example.android.wednesday.models.EventModel;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -76,7 +75,7 @@ public class AddEvent extends AppCompatActivity {
                         addEventSecondHighlight.getText().toString(), addEventThirdHighlight.getText().toString(), addEventStags.getText().toString());
                 mDatabase.push().setValue(eventModel);
                 Toast.makeText(getApplicationContext(), "Event added to Database", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), MainEventsFragment.class));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
             }
         });

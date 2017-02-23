@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -51,19 +52,34 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.Featur
 
     }
 
+    private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (
+                    motionEvent.getAction() == MotionEvent.ACTION_DOWN &&
+                            view instanceof ViewGroup
+                    ) {
+                ((ViewGroup) view).requestDisallowInterceptTouchEvent(true);
+            }
+            return false;
+        }
+    };
+
+
+
     @Override
     public int getItemCount() {
         return data.size();
     }
 
-    class FeaturedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class FeaturedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView eventPlace;
         TextView eventAddress;
         TextView eventCost;
         private Context context;
 
-        public FeaturedViewHolder(Context context, View view){
+        public FeaturedViewHolder(Context context, View view) {
             super(view);
             this.context = context;
             eventPlace = (TextView) itemView.findViewById(R.id.event_place);
@@ -77,10 +93,26 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.Featur
             Intent intent = new Intent(context, EventDetailsActivity.class);
             context.startActivity(intent);
         }
+
+        private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (
+                        motionEvent.getAction() == MotionEvent.ACTION_DOWN &&
+                                view instanceof ViewGroup
+                        ) {
+                    ((ViewGroup) view).requestDisallowInterceptTouchEvent(true);
+                }
+                return false;
+            }
+        };
     }
 
 
 }
+
+
+
 
 
 
