@@ -126,7 +126,7 @@ public class MainProfileFragment extends Fragment {
                     if (firebaseUser != null) {
 
                         databaseReference.child("users").child(firebaseUser.getUid())
-                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                .addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         User user = dataSnapshot.getValue(User.class);
@@ -250,6 +250,7 @@ public class MainProfileFragment extends Fragment {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
                         databaseReference.child("users").child(user.getUid()).child("userPhoto").setValue(downloadUrl.toString());
+
                         }
 
                 });
