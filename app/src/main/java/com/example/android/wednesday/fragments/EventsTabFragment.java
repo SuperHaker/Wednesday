@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.example.android.wednesday.R;
+import com.example.android.wednesday.activities.AddEvent;
 import com.example.android.wednesday.activities.EventFilter;
 import com.example.android.wednesday.adapters.FeaturedAdapter;
 import com.example.android.wednesday.adapters.GridAdapter;
@@ -177,7 +178,7 @@ public class EventsTabFragment extends Fragment implements ViewPager.OnPageChang
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu2, menu);
+        inflater.inflate(R.menu.events_menu, menu);
     }
 
     @Override
@@ -188,6 +189,9 @@ public class EventsTabFragment extends Fragment implements ViewPager.OnPageChang
                 Intent intent = new Intent(getContext(), EventFilter.class);
                 startActivity(intent);
                 return true;
+
+            case R.id.add_event:
+                startActivity(new Intent(getContext(), AddEvent.class));
 
         }
         return super.onOptionsItemSelected(item);

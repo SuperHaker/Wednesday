@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.wednesday.R;
+import com.example.android.wednesday.activities.AddDineout;
 import com.example.android.wednesday.activities.DineoutFilter;
 import com.example.android.wednesday.adapters.DineoutCollectionsGridAdapter;
 import com.example.android.wednesday.adapters.DineoutCuisinesGridAdapter;
@@ -306,7 +307,7 @@ public class DineOutTabFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu2, menu);
+        inflater.inflate(R.menu.dineout_menu, menu);
     }
 
     @Override
@@ -317,6 +318,9 @@ public class DineOutTabFragment extends Fragment {
                 Intent intent = new Intent(getContext(), DineoutFilter.class);
                 startActivity(intent);
                 return true;
+
+            case R.id.add_dineout:
+                startActivity(new Intent(getContext(), AddDineout.class));
 
         }
         return super.onOptionsItemSelected(item);

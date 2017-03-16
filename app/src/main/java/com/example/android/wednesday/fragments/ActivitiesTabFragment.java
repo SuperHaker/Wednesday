@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.activities.ActivitiesFilter;
+import com.example.android.wednesday.activities.AddActivity;
 import com.example.android.wednesday.adapters.FeaturedActivitiesAdapter;
 import com.example.android.wednesday.adapters.GridAdapter;
 import com.example.android.wednesday.adapters.TopPicksActivitiesAdapter;
@@ -177,7 +178,7 @@ public class ActivitiesTabFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu2, menu);
+        inflater.inflate(R.menu.activities_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -189,6 +190,9 @@ public class ActivitiesTabFragment extends Fragment {
                 Intent intent = new Intent(getContext(), ActivitiesFilter.class);
                 startActivity(intent);
                 return true;
+
+            case R.id.add_activity:
+                startActivity(new Intent(getContext(), AddActivity.class));
 
         }return super.onOptionsItemSelected(item);
     }

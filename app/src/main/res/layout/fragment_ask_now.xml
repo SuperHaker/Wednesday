@@ -1,8 +1,24 @@
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical">
+
+<AutoCompleteTextView
+    android:id="@+id/ask_now_edittext"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/actionBarSize"
+    android:drawableLeft="@drawable/ic_magnify_white_24dp"
+    android:hint=" Ask Now"
+    android:background="#000"
+    android:paddingLeft="8dp"
+    />
+
 <android.support.v7.widget.RecyclerView
     android:id="@+id/ask_now_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:scrollbars="none"
     android:paddingBottom="56dp"
     />
+    </LinearLayout>

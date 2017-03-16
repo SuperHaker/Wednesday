@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,8 @@ public class MainAskNowFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter = null;
+    Fragment fragment = null;
+
 
 
     public MainAskNowFragment() {
@@ -44,20 +47,25 @@ public class MainAskNowFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_main_ask_now, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_main_ask_now, container, false);
         toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
-//        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-//        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
         viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         viewPager.setAdapter(mSectionsPagerAdapter);
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
 
-
-
         return rootView;
     }
+
+//    public void replaceFragment(Fragment someFragment) {
+//        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+//        transaction.replace(R.id.container, someFragment);
+//        transaction.addToBackStack(null);
+//        transaction.commit();
+//    }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 

@@ -12,7 +12,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,7 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.wednesday.R;
-import com.example.android.wednesday.activities.AddItemActivity;
 import com.example.android.wednesday.activities.LogInActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -133,14 +131,6 @@ public class MainEventsFragment extends Fragment  {
         tabLayout.setupWithViewPager(viewPager);
 
 
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), AddItemActivity.class);
-                startActivity(intent);
-            }
-        });
 
 
         return rootView;
