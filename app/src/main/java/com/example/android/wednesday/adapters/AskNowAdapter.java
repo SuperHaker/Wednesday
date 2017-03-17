@@ -31,13 +31,18 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
         inflater = LayoutInflater.from(context);
         this.context = context;
         this.list = list;
+//        setHasStableIds(true);
     }
+
+//    @Override
+//    public long getItemId(int position) {
+//        return position;
+//    }
 
     @Override
     public AskNowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = inflater.inflate(R.layout.ask_now_layout, parent, false);
-         ll = view.findViewById(R.id.tags_holder);
 
 //        tv.setBackgroundColor(context.getResources().getColor(R.color.orange500));
 
@@ -49,10 +54,12 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
     public void onBindViewHolder(AskNowViewHolder holder, int position) {
 //        holder.addExtraTextView();
 //        holder.chip.setChipText("Tag");
-
+        holder.tagHolder.removeAllViews();
         AskQuestionModel currentCard = list.get(position);
         for(int i = 0;i < currentCard.tags.size(); i++){
             String text = currentCard.tags.get(i);
+            ll = holder.itemView.findViewById(R.id.tags_holder);
+
             makeChip(text);
         }
         holder.question.setText(currentCard.question);
@@ -60,11 +67,7 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
 
     }
 
-    @Override
-    public void onViewRecycled(AskNowViewHolder holder) {
-        super.onViewRecycled(holder);
-        holder.tagHolder.removeAllViews();
-    }
+
 
     @Override
     public int getItemCount() {

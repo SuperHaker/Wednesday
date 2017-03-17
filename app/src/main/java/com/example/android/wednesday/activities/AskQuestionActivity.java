@@ -1,5 +1,6 @@
 package com.example.android.wednesday.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -32,6 +33,9 @@ public class AskQuestionActivity extends AppCompatActivity {
         postQuestion = (Button) findViewById(R.id.post_question_button);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("asknow");
 
+        Intent intent = getIntent();
+        String question = intent.getStringExtra("question");
+        askedQuestion.setText(question);
 
         postQuestion.setOnClickListener(new View.OnClickListener() {
             @Override

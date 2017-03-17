@@ -127,7 +127,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Write your answer"
+            android:textColor="@android:color/black"
             android:textSize="12sp"
+            android:layout_weight="1"
+            android:inputType="textCapSentences|textMultiLine"
             android:paddingTop="0dp"
             android:height="30dp"/>
 

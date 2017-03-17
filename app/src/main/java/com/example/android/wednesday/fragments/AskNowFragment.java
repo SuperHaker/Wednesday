@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -33,17 +32,14 @@ import java.util.List;
  */
 public class AskNowFragment extends Fragment {
     private RecyclerView recyclerView;
-    private AskNowAdapter adapter;
+    private AskNowAdapter adapter = null;
     private RecyclerView.LayoutManager mLayoutManager;
     private AutoCompleteTextView autoCompleteTextView;
     DatabaseReference databaseReference;
     ValueEventListener valueEventListener;
     List<AskQuestionModel> dataSource;
 
-    public static final String[] list = new String[] {
-      "Add your question"
-    };
-
+    public static final List<String> list = new ArrayList<String>();
     public AskNowFragment() {
         // Required empty public constructor
     }
@@ -70,25 +66,29 @@ public class AskNowFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
 
         autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.ask_now_edittext);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, list);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.dropdown_item, list);
         autoCompleteTextView.setAdapter(adapter);
 
-        autoCompleteTextView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    autoCompleteTextView.setFocusable(true);
-                    autoCompleteTextView.requestFocus();
-                    autoCompleteTextView.showDropDown();
-                }
-                return true;
-            }
-        });
+//        autoCompleteTextView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+//                    autoCompleteTextView.showDropDown();
+//                }
+//                return false;
+//            }
+//        });
 
+        autoCompleteTextView.setThreshold(0);
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                startActivity(new Intent(getContext(), AskQuestionActivity.class));
+                if(adapter.getItem(i).equals("Add your question")) {
+                    autoCompleteTextView.setText("");
+                    Intent intent  = new Intent(getContext(), AskQuestionActivity.class);
+                    intent.putExtra("question", autoCompleteTextView.getText().toString());
+                    startActivity(intent);
+                }
 
             }
         });
@@ -96,6 +96,7 @@ public class AskNowFragment extends Fragment {
         if(valueEventListener == null) {
             attachDatabaseReadListener();
         }
+
 
         return v;
     }
@@ -112,11 +113,17 @@ public class AskNowFragment extends Fragment {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     dataSource.clear();
+                    list.clear();
                     for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
                         AskQuestionModel model = childDataSnapshot.getValue(AskQuestionModel.class);
                         dataSource.add(model);
+                        list.add(model.question);
+
+
                         adapter.notifyDataSetChanged();
                     }
+                    list.add("Add your question");
+
                 }
 
                 @Override
