@@ -7,6 +7,7 @@ package com.example.android.wednesday.models;
 public class ImageUriModel {
 
     public String link;
+    public String userId;
 
     public ImageUriModel(){
 

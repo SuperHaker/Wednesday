@@ -48,7 +48,8 @@
         <activity android:name=".activities.AddActivity" />
         <activity android:name=".activities.AddDineout" />
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
-        <activity android:name=".activities.AskQuestionActivity"></activity>
+        <activity android:name=".activities.AskQuestionActivity" />
+        <activity android:name=".activities.WriteAnswerActivity"></activity>
     </application>
 
 </manifest>

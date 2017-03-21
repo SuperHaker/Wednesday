@@ -71,7 +71,7 @@ public class FeedFragment extends Fragment {
         dataSource = new ArrayList<>();
         mFirebaseStorage = FirebaseStorage.getInstance();
         mFeedPicturesStorageReference = mFirebaseStorage.getReference().child("feedPhotos");
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("feedPhotos");
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         final File root = new File(Environment.getExternalStorageDirectory() + File.separator + "MyDir" + File.separator);
         root.mkdirs();
@@ -191,7 +191,7 @@ public class FeedFragment extends Fragment {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             ImageUriModel imageUriModel = new ImageUriModel(taskSnapshot.getDownloadUrl().toString());
-                            databaseReference.child(user.getUid()).push().setValue(imageUriModel);
+                            databaseReference.child("feedPhotos").child(user.getUid()).push().setValue(imageUriModel);
 
                         }
 
@@ -212,6 +212,7 @@ public class FeedFragment extends Fragment {
                     for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
                         for (DataSnapshot ds : childDataSnapshot.getChildren()) {
                             ImageUriModel model = ds.getValue(ImageUriModel.class);
+                            model.userId = childDataSnapshot.getKey();
                             dataSource.add(model);
 
                             adapter.notifyDataSetChanged();
@@ -226,8 +227,8 @@ public class FeedFragment extends Fragment {
                 }
 
             };
-            databaseReference.addValueEventListener(valueEventListener);
-            adapter = new FeedAdapter(getContext(), dataSource);
+            databaseReference.child("feedPhotos").addValueEventListener(valueEventListener);
+            adapter = new FeedAdapter(getContext(), dataSource, databaseReference);
             recyclerView.setAdapter(adapter);
         }
     }

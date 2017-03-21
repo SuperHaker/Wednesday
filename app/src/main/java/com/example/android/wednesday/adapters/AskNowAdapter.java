@@ -1,6 +1,7 @@
 package com.example.android.wednesday.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.wednesday.R;
+import com.example.android.wednesday.activities.WriteAnswerActivity;
 import com.example.android.wednesday.models.AskQuestionModel;
 import com.robertlevonyan.views.chip.Chip;
 
@@ -74,7 +76,7 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
         return list.size();
     }
 
-    class AskNowViewHolder extends RecyclerView.ViewHolder {
+    class AskNowViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         LinearLayout tagHolder;
         Context context;
         View v;
@@ -89,11 +91,20 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
              tagHolder = (LinearLayout) itemView.findViewById(R.id.tags_holder);
 //              vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
              question  = (TextView) itemView.findViewById(R.id.question);
+             v = itemView.findViewById(R.id.write_answer);
+             v.setOnClickListener(this);
 
 
          }
 
-//        public void addExtraTextView() {
+        @Override
+        public void onClick(View view) {
+            if(view.getId() == R.id.write_answer){
+                context.startActivity(new Intent(context, WriteAnswerActivity.class).putExtra("question", question.getText().toString()));
+            }
+        }
+
+        //        public void addExtraTextView() {
 //            v = vi.inflate(R.layout.question_tag, null);
 //            chip = (Chip) v.findViewById(chip);
 //            chip.setChipText("Tag");
