@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.models.AskQuestionModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -42,8 +44,9 @@ public class AskQuestionActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String[] ar = questionTags.getText().toString().split("\\s*,\\s*");
                 List<String> list = Arrays.asList(ar);
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 AskQuestionModel askQuestionModel = new AskQuestionModel(askedQuestion.getText().toString(), list);
-                databaseReference.push().setValue(askQuestionModel);
+                databaseReference.child(user.getUid()).push().setValue(askQuestionModel);
                 Toast.makeText(AskQuestionActivity.this, "Question Added", Toast.LENGTH_SHORT).show();
                 finish();
             }

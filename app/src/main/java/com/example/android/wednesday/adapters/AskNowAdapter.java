@@ -65,6 +65,7 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
             makeChip(text);
         }
         holder.question.setText(currentCard.question);
+        holder.topAnswer.setText(currentCard.answers.get(0).answer);
 
 
     }
@@ -79,6 +80,7 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
     class AskNowViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         LinearLayout tagHolder;
         Context context;
+        TextView topAnswer;
         View v;
         Chip chip;
         LayoutInflater vi;
@@ -91,6 +93,7 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
              tagHolder = (LinearLayout) itemView.findViewById(R.id.tags_holder);
 //              vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
              question  = (TextView) itemView.findViewById(R.id.question);
+             topAnswer = (TextView) itemView.findViewById(R.id.top_answer);
              v = itemView.findViewById(R.id.write_answer);
              v.setOnClickListener(this);
 
@@ -100,7 +103,12 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
         @Override
         public void onClick(View view) {
             if(view.getId() == R.id.write_answer){
-                context.startActivity(new Intent(context, WriteAnswerActivity.class).putExtra("question", question.getText().toString()));
+                Intent intent = new Intent(context, WriteAnswerActivity.class);
+                AskQuestionModel model = list.get(getAdapterPosition());
+                intent.putExtra("question", question.getText().toString());
+                intent.putExtra("userId", model.userId);
+                intent.putExtra("quesId", model.quesId);
+                context.startActivity(intent);
             }
         }
 

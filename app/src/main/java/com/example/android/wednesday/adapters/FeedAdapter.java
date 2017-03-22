@@ -55,14 +55,18 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                 .load(currentCard.link)
                 .into(holder.imageView);
 
+        holder.userImage.setImageResource(R.drawable.user);
+
         databaseReference.child(currentCard.userId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 holder.userName.setText(user.username);
-                Glide.with(context)
-                        .load(user.userPhoto)
-                        .into(holder.userImage);
+                if (user.userPhoto != null) {
+                    Glide.with(context)
+                            .load(user.userPhoto)
+                            .into(holder.userImage);
+                }
             }
 
             @Override

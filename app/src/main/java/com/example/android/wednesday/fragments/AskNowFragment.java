@@ -115,12 +115,16 @@ public class AskNowFragment extends Fragment {
                     dataSource.clear();
                     list.clear();
                     for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                        AskQuestionModel model = childDataSnapshot.getValue(AskQuestionModel.class);
-                        dataSource.add(model);
-                        list.add(model.question);
+                        for (DataSnapshot ds : childDataSnapshot.getChildren()) {
+                            AskQuestionModel model = ds.getValue(AskQuestionModel.class);
+                            model.userId = childDataSnapshot.getKey();
+                            model.quesId = ds.getKey();
+                            dataSource.add(model);
+                            list.add(model.question);
 
 
-                        adapter.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged();
+                        }
                     }
                     list.add("Add your question");
 
