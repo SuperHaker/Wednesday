@@ -11,12 +11,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.wednesday.R;
+import com.example.android.wednesday.activities.AllAnswersActivity;
 import com.example.android.wednesday.activities.WriteAnswerActivity;
+import com.example.android.wednesday.models.AnswerModel;
 import com.example.android.wednesday.models.AskQuestionModel;
 import com.robertlevonyan.views.chip.Chip;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by hp pc on 3/6/2017.
@@ -28,7 +31,7 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
     public Context context;
     List<AskQuestionModel> list = Collections.EMPTY_LIST;
     View ll;
-
+    String key;
     public AskNowAdapter(Context context, List<AskQuestionModel> list){
         inflater = LayoutInflater.from(context);
         this.context = context;
@@ -55,18 +58,31 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
     @Override
     public void onBindViewHolder(AskNowViewHolder holder, int position) {
 //        holder.addExtraTextView();
+        holder.answererInfo.setVisibility(View.GONE);
 //        holder.chip.setChipText("Tag");
         holder.tagHolder.removeAllViews();
         AskQuestionModel currentCard = list.get(position);
+//        Collection<AnswerModel> collections = currentCard.map.values();
+//        List<AnswerModel> list = new ArrayList<>();
+//        list.addAll(collections);
+        if(!currentCard.map.isEmpty()) {
+            Map.Entry<String, AnswerModel> entry = currentCard.map.entrySet().iterator().next();
+            key = entry.getKey();
+            AnswerModel model = entry.getValue();
+            holder.answererInfo.setVisibility(View.VISIBLE);
+            holder.topAnswer.setText(model.answer);
+        }
         for(int i = 0;i < currentCard.tags.size(); i++){
             String text = currentCard.tags.get(i);
             ll = holder.itemView.findViewById(R.id.tags_holder);
-
-            makeChip(text);
+            if(!text.isEmpty())
+                makeChip(text);
         }
         holder.question.setText(currentCard.question);
-        holder.topAnswer.setText(currentCard.answers.get(0).answer);
-
+//        String s = ;
+//        if(currentCard.answersList != null) {
+//
+//        }
 
     }
 
@@ -84,8 +100,9 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
         View v;
         Chip chip;
         LayoutInflater vi;
-
+        View answererInfo;
         TextView question;
+        View upvoter, downvoter, seeMoreAnswers;
 
          public AskNowViewHolder(View itemView, Context context){
              super(itemView);
@@ -96,6 +113,13 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
              topAnswer = (TextView) itemView.findViewById(R.id.top_answer);
              v = itemView.findViewById(R.id.write_answer);
              v.setOnClickListener(this);
+             answererInfo = itemView.findViewById(R.id.first_answer_info);
+             upvoter = itemView.findViewById(R.id.upvote_answer);
+             downvoter = itemView.findViewById(R.id.downvote_answer);
+             upvoter.setOnClickListener(this);
+             downvoter.setOnClickListener(this);
+             seeMoreAnswers = itemView.findViewById(R.id.see_more_answers);
+             seeMoreAnswers.setOnClickListener(this);
 
 
          }
@@ -106,6 +130,19 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
                 Intent intent = new Intent(context, WriteAnswerActivity.class);
                 AskQuestionModel model = list.get(getAdapterPosition());
                 intent.putExtra("question", question.getText().toString());
+                intent.putExtra("userId", model.userId);
+                intent.putExtra("quesId", model.quesId);
+                context.startActivity(intent);
+            }
+
+            if(view == upvoter){
+
+            }
+
+            if(view == seeMoreAnswers){
+                Intent intent = new Intent(context, AllAnswersActivity.class);
+                intent.putExtra("question", question.getText().toString());
+                AskQuestionModel model = list.get(getAdapterPosition());
                 intent.putExtra("userId", model.userId);
                 intent.putExtra("quesId", model.quesId);
                 context.startActivity(intent);

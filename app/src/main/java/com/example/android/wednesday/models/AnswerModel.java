@@ -8,6 +8,7 @@ public class AnswerModel {
 
     public String answer;
     public int upvotes;
+//    public String answerId;
 
     public AnswerModel(){}
 

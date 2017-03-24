@@ -30,11 +30,17 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"/>
 
+    <LinearLayout
+        android:id="@+id/first_answer_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+       >
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:padding="8dp">
 
 
@@ -44,6 +50,7 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/upvote_answer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_up_drop_circle_outline_black_24dp"/>
@@ -55,6 +62,7 @@
                 android:layout_gravity="center"/>
 
             <ImageView
+                android:id="@+id/downvote_answer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_down_drop_circle_outline_black_24dp"/>
@@ -98,6 +106,7 @@
 
 
     <TextView
+        android:id="@+id/see_more_answers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="8dp"
@@ -105,6 +114,8 @@
         android:text="See more answers..."
         android:textColor="@android:color/holo_blue_dark"
         android:layout_marginBottom="8dp"/>
+
+    </LinearLayout>
 
     <View
         android:layout_width="280dp"

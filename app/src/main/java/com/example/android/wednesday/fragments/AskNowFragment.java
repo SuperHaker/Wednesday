@@ -13,19 +13,24 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ProgressBar;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.activities.AskQuestionActivity;
 import com.example.android.wednesday.adapters.AskNowAdapter;
+import com.example.android.wednesday.models.AnswerModel;
 import com.example.android.wednesday.models.AskQuestionModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +43,7 @@ public class AskNowFragment extends Fragment {
     DatabaseReference databaseReference;
     ValueEventListener valueEventListener;
     List<AskQuestionModel> dataSource;
+    ProgressBar progressBar;
 
     public static final List<String> list = new ArrayList<String>();
     public AskNowFragment() {
@@ -59,7 +65,7 @@ public class AskNowFragment extends Fragment {
 
 
         View v =  inflater.inflate(R.layout.fragment_ask_now, container, false);
-
+        progressBar = (ProgressBar) v.findViewById(R.id.progress);
                 recyclerView = (RecyclerView) v.findViewById(R.id.ask_now_list);
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -109,6 +115,7 @@ public class AskNowFragment extends Fragment {
 
     private void attachDatabaseReadListener() {
         if (valueEventListener == null) {
+            progressBar.setVisibility(View.VISIBLE);
             valueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -117,7 +124,16 @@ public class AskNowFragment extends Fragment {
                     for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
                         for (DataSnapshot ds : childDataSnapshot.getChildren()) {
                             AskQuestionModel model = ds.getValue(AskQuestionModel.class);
-                            model.userId = childDataSnapshot.getKey();
+                            GenericTypeIndicator<Map<String, AnswerModel>> t = new GenericTypeIndicator<Map<String, AnswerModel>>() {};
+                            Map<String, AnswerModel> map =  ds.child("answers").getValue(t);
+                            if(map != null) {
+                                Collection<AnswerModel> collection = map.values();
+//                                List<AnswerModel> answerModel = new ArrayList<>();
+//                                answerModel.addAll(collection);
+//                                model.answersList = answerModel;
+                                model.map = map;
+                            }
+                                model.userId = childDataSnapshot.getKey();
                             model.quesId = ds.getKey();
                             dataSource.add(model);
                             list.add(model.question);
@@ -127,6 +143,7 @@ public class AskNowFragment extends Fragment {
                         }
                     }
                     list.add("Add your question");
+                    progressBar.setVisibility(View.GONE);
 
                 }
 
