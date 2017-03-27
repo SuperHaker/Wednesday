@@ -45,7 +45,6 @@ public class MainEventsFragment extends Fragment  {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter = null;
-    LayoutInflater inflator;
     LocationManager locationManager;
 
     TextView currentLocation;
@@ -69,38 +68,6 @@ public class MainEventsFragment extends Fragment  {
         mSectionsPagerAdapter.addFrag(new ActivitiesTabFragment(), "TWO");
         mSectionsPagerAdapter.addFrag(new DineOutTabFragment(), "THREE");
 
-        locationManager = (LocationManager)
-                getActivity().getSystemService(Context.LOCATION_SERVICE);
-        gcd = new Geocoder(getActivity(), Locale.getDefault());
-
-
-        if(cityName==null) {
-            locationListener = new MyLocationListener();
-        }
-        boolean gpsIsEnabled = locationManager
-                .isProviderEnabled(LocationManager.GPS_PROVIDER);
-        boolean networkIsEnabled = locationManager
-                .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-        if (networkIsEnabled) {
-            try {
-                locationManager.requestLocationUpdates(
-                        LocationManager.NETWORK_PROVIDER, 2000, 500, locationListener);
-            } catch (SecurityException e) {
-                e.printStackTrace();
-            }
-        } else if (gpsIsEnabled) {
-            try {
-                locationManager.requestLocationUpdates(
-                        LocationManager.GPS_PROVIDER, 2000, 500, locationListener);
-            } catch (SecurityException e) {
-                e.printStackTrace();
-            }
-        }
-        else{
-            alertbox("Gps Status!!", "Your GPS is: OFF");
-        }
-
 
 
     }
@@ -117,6 +84,9 @@ public class MainEventsFragment extends Fragment  {
         View v = inflater.inflate(R.layout.location_header, null);
         toolbar.addView(v);
         currentLocation = (TextView) toolbar.findViewById(R.id.current_location);
+        if(cityName == null){
+            ListenForLocation();
+        }
 
         currentLocation.setText(cityName);
 
@@ -236,12 +206,47 @@ public class MainEventsFragment extends Fragment  {
         alert.show();
     }
 
+
+    public void ListenForLocation(){
+        locationManager = (LocationManager)
+                getActivity().getSystemService(Context.LOCATION_SERVICE);
+        gcd = new Geocoder(getActivity(), Locale.getDefault());
+
+
+        locationListener = new MyLocationListener();
+
+        boolean gpsIsEnabled = locationManager
+                .isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean networkIsEnabled = locationManager
+                .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        if (networkIsEnabled) {
+            try {
+                locationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER, 2000, 500, locationListener);
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+        } else if (gpsIsEnabled) {
+            try {
+                locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER, 2000, 500, locationListener);
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            alertbox("Gps Status!!", "Your GPS is: OFF");
+        }
+
+
+    }
+
     public class MyLocationListener implements LocationListener {
         private static final String TAG = "Location";
 
         @Override
         public void onLocationChanged(Location loc) {
-            currentLocation.setText("Getting Location...");
 //            pb.setVisibility(View.INVISIBLE);
 
 //            String longitude = "Longitude: " + loc.getLongitude();

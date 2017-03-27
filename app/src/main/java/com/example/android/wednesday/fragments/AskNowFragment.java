@@ -1,22 +1,20 @@
 package com.example.android.wednesday.fragments;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 
 import com.example.android.wednesday.R;
-import com.example.android.wednesday.activities.AskQuestionActivity;
 import com.example.android.wednesday.adapters.AskNowAdapter;
 import com.example.android.wednesday.models.AnswerModel;
 import com.example.android.wednesday.models.AskQuestionModel;
@@ -39,7 +37,7 @@ public class AskNowFragment extends Fragment {
     private RecyclerView recyclerView;
     private AskNowAdapter adapter = null;
     private RecyclerView.LayoutManager mLayoutManager;
-    private AutoCompleteTextView autoCompleteTextView;
+    private AutoCompleteTextView editText;
     DatabaseReference databaseReference;
     ValueEventListener valueEventListener;
     List<AskQuestionModel> dataSource;
@@ -71,9 +69,31 @@ public class AskNowFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.ask_now_edittext);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.dropdown_item, list);
-        autoCompleteTextView.setAdapter(adapter);
+        editText = (AutoCompleteTextView) v.findViewById(R.id.ask_now_edittext);
+
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String query = editable.toString();
+                if(!query.isEmpty()){
+                    
+                }
+            }
+        });
+
+
+//        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.dropdown_item, list);
+//        editText.setAdapter(adapter);
 
 //        autoCompleteTextView.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
@@ -85,19 +105,19 @@ public class AskNowFragment extends Fragment {
 //            }
 //        });
 
-        autoCompleteTextView.setThreshold(0);
-        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(adapter.getItem(i).equals("Add your question")) {
-                    autoCompleteTextView.setText("");
-                    Intent intent  = new Intent(getContext(), AskQuestionActivity.class);
-                    intent.putExtra("question", autoCompleteTextView.getText().toString());
-                    startActivity(intent);
-                }
-
-            }
-        });
+//        autoCompleteTextView.setThreshold(0);
+//        editText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                if(adapter.getItem(i).equals("Add your question")) {
+//                    autoCompleteTextView.setText("");
+//                    Intent intent  = new Intent(getContext(), AskQuestionActivity.class);
+//                    intent.putExtra("question", autoCompleteTextView.getText().toString());
+//                    startActivity(intent);
+//                }
+//
+//            }
+//        });
 
         if(valueEventListener == null) {
             attachDatabaseReadListener();

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.adapters.AllAnswersAdapter;
 import com.example.android.wednesday.models.AnswerModel;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +33,7 @@ public class AllAnswersActivity extends AppCompatActivity {
     List<AnswerModel> dataSource = new ArrayList<>();
     DatabaseReference databaseReference;
     ValueEventListener valueEventListener = null;
+    ChildEventListener childEventListener = null;
     Map<String, AnswerModel> map;
     Button writeAnswer;
     ProgressBar progressBar;
@@ -65,7 +67,7 @@ public class AllAnswersActivity extends AppCompatActivity {
         });
 //        adapter = new AllAnswersAdapter(getApplicationContext());
 //        recyclerView.setAdapter(adapter);
-        if(valueEventListener == null){
+        if(childEventListener == null){
             attachDatabaseReadListener();
         }
     }
@@ -77,41 +79,80 @@ public class AllAnswersActivity extends AppCompatActivity {
     }
 
     public void attachDatabaseReadListener(){
-        if (valueEventListener == null) {
-            progressBar.setVisibility(View.VISIBLE);
-            valueEventListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    dataSource.clear();
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        AnswerModel model = ds.getValue(AnswerModel.class);
-                        dataSource.add(model);
-                        adapter.notifyDataSetChanged();
 
-                    }
-//                if(map != null)
-//                    map.clear();
-//                GenericTypeIndicator<Map<String, AnswerModel>> t = new GenericTypeIndicator<Map<String, AnswerModel>>() {};
-//                 map = dataSnapshot.getValue(t);
-                    progressBar.setVisibility(View.GONE);
+        if(childEventListener == null){
+            progressBar.setVisibility(View.VISIBLE);
+            databaseReference.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    AnswerModel model = dataSnapshot.getValue(AnswerModel.class);
+                    model.answerId = dataSnapshot.getKey();
+                    dataSource.add(model);
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
                 }
-
-            };
-            databaseReference.addValueEventListener(valueEventListener);
-            adapter = new AllAnswersAdapter(getApplicationContext(), dataSource);
+            });
+//            databaseReference.addChildEventListener(childEventListener);
+            adapter = new AllAnswersAdapter(getApplicationContext(), dataSource, databaseReference);
+            progressBar.setVisibility(View.GONE);
             recyclerView.setAdapter(adapter);
         }
+
+
+//        if (valueEventListener == null) {
+//            progressBar.setVisibility(View.VISIBLE);
+//            valueEventListener = new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    dataSource.clear();
+//                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                        AnswerModel model = ds.getValue(AnswerModel.class);
+//                        dataSource.add(model);
+//                        adapter.notifyDataSetChanged();
+//
+//                    }
+////                if(map != null)
+////                    map.clear();
+////                GenericTypeIndicator<Map<String, AnswerModel>> t = new GenericTypeIndicator<Map<String, AnswerModel>>() {};
+////                 map = dataSnapshot.getValue(t);
+//                    progressBar.setVisibility(View.GONE);
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//
+//            };
+//            databaseReference.addValueEventListener(valueEventListener);
+//            adapter = new AllAnswersAdapter(getApplicationContext(), dataSource);
+//            recyclerView.setAdapter(adapter);
+//        }
     }
 
     public void detachDatabaseReadListener(){
-        if(valueEventListener != null){
-            databaseReference.removeEventListener(valueEventListener);
-            valueEventListener = null;
+        if(childEventListener != null){
+            databaseReference.removeEventListener(childEventListener);
+            childEventListener = null;
         }
 
     }

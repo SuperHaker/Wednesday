@@ -12,8 +12,11 @@ import android.widget.Toast;
 
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.models.AnswerModel;
+import com.example.android.wednesday.models.Upvotes;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class WriteAnswerActivity extends AppCompatActivity {
 
@@ -49,7 +52,8 @@ public class WriteAnswerActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.done:
                 Toast.makeText(WriteAnswerActivity.this, "Done clicked", Toast.LENGTH_SHORT).show();
-                AnswerModel model = new AnswerModel(writable.getText().toString(), 0);
+                Upvotes upvotes = new Upvotes(0, new HashMap<String, Boolean>());
+                AnswerModel model = new AnswerModel(writable.getText().toString(), upvotes);
                 databaseReference.push().setValue(model);
                 finish();
 

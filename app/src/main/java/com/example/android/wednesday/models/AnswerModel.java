@@ -7,12 +7,12 @@ package com.example.android.wednesday.models;
 public class AnswerModel {
 
     public String answer;
-    public int upvotes;
-//    public String answerId;
+    public String answerId;
+    public Upvotes upvotes;
 
     public AnswerModel(){}
 
-    public AnswerModel(String answer, int upvotes){
+    public AnswerModel(String answer, Upvotes upvotes){
         this.answer = answer;
         this.upvotes = upvotes;
     }

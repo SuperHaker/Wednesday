@@ -71,6 +71,7 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
             AnswerModel model = entry.getValue();
             holder.answererInfo.setVisibility(View.VISIBLE);
             holder.topAnswer.setText(model.answer);
+            holder.votes.setText(Long.toString(model.upvotes.number));
         }
         for(int i = 0;i < currentCard.tags.size(); i++){
             String text = currentCard.tags.get(i);
@@ -96,7 +97,7 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
     class AskNowViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         LinearLayout tagHolder;
         Context context;
-        TextView topAnswer;
+        TextView topAnswer, votes;
         View v;
         Chip chip;
         LayoutInflater vi;
@@ -116,6 +117,7 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
              answererInfo = itemView.findViewById(R.id.first_answer_info);
              upvoter = itemView.findViewById(R.id.upvote_answer);
              downvoter = itemView.findViewById(R.id.downvote_answer);
+             votes = (TextView) itemView.findViewById(R.id.votes);
              upvoter.setOnClickListener(this);
              downvoter.setOnClickListener(this);
              seeMoreAnswers = itemView.findViewById(R.id.see_more_answers);
