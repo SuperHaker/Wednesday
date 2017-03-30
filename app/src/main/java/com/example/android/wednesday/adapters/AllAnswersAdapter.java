@@ -1,26 +1,36 @@
 package com.example.android.wednesday.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import com.bumptech.glide.Glide;
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.models.AnswerModel;
+import com.example.android.wednesday.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by hp pc on 3/24/2017.
@@ -31,21 +41,25 @@ public class AllAnswersAdapter extends RecyclerView.Adapter<AllAnswersAdapter.Al
 
     LayoutInflater inflater;
     Context context;
-    List<AnswerModel> list;
+    Map<String, AnswerModel> map = new LinkedHashMap<>();
     DatabaseReference databaseReference;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    List<AnswerModel> list = Collections.EMPTY_LIST;
+    List<String> keyList = new ArrayList<>();
+    DatabaseReference userReference;
 
 
-    public AllAnswersAdapter(Context context, List<AnswerModel> list, DatabaseReference databaseReference) {
+    public AllAnswersAdapter(Context context, Map<String, AnswerModel> map, DatabaseReference databaseReference, List<String> keyList) {
         inflater = LayoutInflater.from(context);
         this.context = context;
 //        if(map != null) {
 //            list = new ArrayList<AnswerModel>(map.values());
 //        }
 
-        this.list = list;
+        this.map = map;
+        userReference = FirebaseDatabase.getInstance().getReference().child("users");
         this.databaseReference = databaseReference;
-
+        this.keyList = keyList;
 
     }
 
@@ -58,124 +72,172 @@ public class AllAnswersAdapter extends RecyclerView.Adapter<AllAnswersAdapter.Al
     }
 
     @Override
-    public void onBindViewHolder(AllAnswersViewHolder holder, int position) {
-        if (!list.isEmpty() || list != null) {
-            AnswerModel model = list.get(position);
+    public void onBindViewHolder(final AllAnswersViewHolder holder, int position) {
+        holder.userImage.setImageResource(R.drawable.user);
+
+        if (!map.isEmpty() || map != null) {
+           final AnswerModel model = map.get(keyList.get(position));
             holder.ans.setText(model.answer);
+
+            userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User user =  dataSnapshot.child(model.answererUid).getValue(User.class);
+                    Glide.with(context)
+                            .load(user.userPhoto)
+                            .into(holder.userImage);
+                    holder.userName.setText(user.username);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
             holder.votes.setText(Long.toString(model.upvotes.number));
-            if (list.get(position).upvotes.listOfPeople != null) {
-                Map<String, Boolean> map = list.get(position).upvotes.listOfPeople;
-                if (map.containsKey(user.getUid())) {
-                    if (map.get(user.getUid())) {
-                        holder.upvote.setImageResource(R.drawable.ic_arrow_up_drop_circle_black_24dp);
-                    } else if (!map.get(user.getUid())) {
-                        holder.downvote.setImageResource(R.drawable.ic_arrow_down_drop_circle_black_24dp);
+            if ( map.get(keyList.get(position)).upvotes.listOfPeople != null) {
+                Map<String, Boolean> votersMap =  map.get(keyList.get(position)).upvotes.listOfPeople;
+                if (votersMap.containsKey(user.getUid())) {
+                    if (votersMap.get(user.getUid())) {
+                        holder.upvote.setChecked(true);
+                    } else if (!votersMap.get(user.getUid())) {
+                        holder.downvote.setChecked(true);
                     }
                 } else {
-                    holder.upvote.setImageResource(R.drawable.ic_arrow_up_drop_circle_outline_black_24dp);
-                    holder.downvote.setImageResource(R.drawable.ic_arrow_down_drop_circle_outline_black_24dp);
+                    holder.upvote.setChecked(false);
+                    holder.downvote.setChecked(false);
                 }
 
             } else {
-                holder.upvote.setImageResource(R.drawable.ic_arrow_up_drop_circle_outline_black_24dp);
-                holder.downvote.setImageResource(R.drawable.ic_arrow_down_drop_circle_outline_black_24dp);
+                holder.upvote.setChecked(false);
+                holder.downvote.setChecked(false);
             }
         }
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return map.size();
     }
 
     class AllAnswersViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView ans;
-        ImageView upvote;
-        ImageView downvote;
-        TextView votes;
+        ToggleButton upvote;
+        ToggleButton downvote;
+        TextView votes, userName;
+        CircleImageView userImage;
 
         public AllAnswersViewHolder(View itemView) {
             super(itemView);
             ans = (TextView) itemView.findViewById(R.id.answer);
-            upvote = (ImageView) itemView.findViewById(R.id.upvote_answer);
-            downvote = (ImageView) itemView.findViewById(R.id.downvote_answer);
+            upvote = (ToggleButton) itemView.findViewById(R.id.upvote_answer);
+            downvote = (ToggleButton) itemView.findViewById(R.id.downvote_answer);
             votes = (TextView) itemView.findViewById(R.id.votes);
+            userImage = (CircleImageView) itemView.findViewById(R.id.user_image);
+            userName = (TextView) itemView.findViewById(R.id.user_name);
             upvote.setOnClickListener(this);
             downvote.setOnClickListener(this);
+
         }
 
         @Override
         public void onClick(final View view) {
-            if (view == upvote || view == downvote) {
-//                 Map<String, Boolean> map = new HashMap<String, Boolean>(list.get(getAdapterPosition()).upvotes.listOfPeople);
-//                 List<String> userKeys = new ArrayList<>(set.keySet());
-//                 if(map.containsKey(user.getUid())){
-//                     Toast.makeText(context, "Already done", Toast.LENGTH_SHORT).show();
-//                 } else {
-                databaseReference.child(list.get(getAdapterPosition()).answerId).child("upvotes").child("number")
-                        .runTransaction(new Transaction.Handler() {
-                            String message = "";
-                            Long value;
+            //(new ArrayList<String>(linkedHashMap.values())).get(pos);
 
-                            @Override
-                            public Transaction.Result doTransaction(MutableData mutableData) {
-                                value = (Long) mutableData.getValue();
-                                if (value == null) {
-                                    return Transaction.success(mutableData);
-                                }
+            databaseReference.child(map.get(keyList.get(getAdapterPosition()))
+                    .answerId).child("upvotes").child("number")
+                    .runTransaction(new Transaction.Handler() {
+                        String message = "";
+                        Long value;
 
-                                if (view == upvote) {
-                                    if (upvote.getDrawable().getConstantState() ==
-                                            context.getResources().getDrawable(R.drawable.ic_arrow_up_drop_circle_outline_black_24dp).getConstantState()) {
-                                        value += 1;
-                                        message = "Upvoted";
-                                        upvote.setImageResource(R.drawable.ic_arrow_up_drop_circle_black_24dp);
-                                        downvote.setImageResource(R.drawable.ic_arrow_down_drop_circle_outline_black_24dp);
-                                        databaseReference.child(list.get(getAdapterPosition()).answerId).child("upvotes")
-                                                .child("listOfPeople").child(user.getUid()).setValue(true);
-
-                                    } else if(upvote.getDrawable().getConstantState() ==
-                                            context.getResources().getDrawable(R.drawable.ic_arrow_up_drop_circle_black_24dp).getConstantState()){
-                                        value -= 1;
-                                        message = "Upvote removed";
-                                        upvote.setImageResource(R.drawable.ic_arrow_up_drop_circle_outline_black_24dp);
-                                        databaseReference.child(list.get(getAdapterPosition()).answerId).child("upvotes")
-                                                .child("listOfPeople").child(user.getUid()).setValue(null);
-                                    }
-
-                                } else if (view == downvote) {
-                                    if (downvote.getDrawable().getConstantState() ==
-                                            context.getResources().getDrawable(R.drawable.ic_arrow_down_drop_circle_outline_black_24dp).getConstantState()) {
-                                        value -= 1;
-                                        message = "Downvoted";
-                                        upvote.setImageResource(R.drawable.ic_arrow_up_drop_circle_outline_black_24dp);
-                                        downvote.setImageResource(R.drawable.ic_arrow_down_drop_circle_black_24dp);
-                                        databaseReference.child(list.get(getAdapterPosition()).answerId).child("upvotes")
-                                                .child("listOfPeople").child(user.getUid()).setValue(false);
-                                    } else if(downvote.getDrawable().getConstantState() ==
-                                            context.getResources().getDrawable(R.drawable.ic_arrow_down_drop_circle_black_24dp).getConstantState()){
-                                        value += 1;
-                                        message = "Downvote removed";
-                                        downvote.setImageResource(R.drawable.ic_arrow_down_drop_circle_outline_black_24dp);
-                                        databaseReference.child(list.get(getAdapterPosition()).answerId).child("upvotes")
-                                                .child("listOfPeople").child(user.getUid()).setValue(null);
-                                    }
-                                }
-                                mutableData.setValue(value);
-
+                        @Override
+                        public Transaction.Result doTransaction(MutableData mutableData) {
+                            if (mutableData.getValue() == null) {
                                 return Transaction.success(mutableData);
                             }
+                            value = (Long) mutableData.getValue();
 
-                            @Override
-                            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-                                votes.setText(value.toString());
+                            if (view == upvote) {
+                                if (upvote.isChecked()) {
+                                    value += 1;
+
+                                    message = "Upvoted";
+                                    if(downvote.isChecked()) {
+                                        ((Activity)context).runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                downvote.setChecked(false);
+
+                                            }
+                                        });
+                                        value++;
+                                    }
+
+
+                                    databaseReference.child(map.get(keyList.get(getAdapterPosition()))
+                                            .answerId).child("upvotes")
+                                            .child("listOfPeople").child(user.getUid()).setValue(true);
+                                    mutableData.setValue(value);
+
+
+                                } else if (!upvote.isChecked()) {
+                                    value -= 1;
+                                    message = "Upvote removed";
+
+                                    databaseReference.child(map.get(keyList.get(getAdapterPosition()))
+                                            .answerId).child("upvotes")
+                                            .child("listOfPeople").child(user.getUid()).setValue(null);
+                                    mutableData.setValue(value);
+
+                                }
                             }
-                        });
-            }
-        }
 
-//         }
+                           if (view == downvote) {
+                                if (downvote.isChecked()) {
+                                    value -= 1;
+                                    message = "Downvoted";
+
+                                    if(upvote.isChecked()) {
+                                        ((Activity)context).runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                upvote.setChecked(false);
+                                            }});
+                                        value--;
+                                    }
+                                    databaseReference.child(map.get(keyList.get(getAdapterPosition()))
+                                            .answerId).child("upvotes")
+                                            .child("listOfPeople").child(user.getUid()).setValue(false);
+                                    mutableData.setValue(value);
+
+                                } else if (!downvote.isChecked()) {
+                                    value += 1;
+                                    message = "Downvote removed";
+
+                                    mutableData.setValue(value);
+                                    databaseReference.child(map.get(keyList.get(getAdapterPosition()))
+                                            .answerId).child("upvotes")
+                                            .child("listOfPeople").child(user.getUid()).setValue(null);
+                                    mutableData.setValue(value);
+
+
+                                }
+                            }
+
+                            return Transaction.success(mutableData);
+                        }
+
+                        @Override
+                        public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                            votes.setText(value.toString());
+                        }
+                    });
+
+        }
     }
+
 }
+

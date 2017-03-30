@@ -13,6 +13,8 @@ import android.widget.Toast;
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.models.AnswerModel;
 import com.example.android.wednesday.models.Upvotes;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -23,6 +25,8 @@ public class WriteAnswerActivity extends AppCompatActivity {
     TextView ques;
     DatabaseReference databaseReference;
     EditText writable;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +57,7 @@ public class WriteAnswerActivity extends AppCompatActivity {
             case R.id.done:
                 Toast.makeText(WriteAnswerActivity.this, "Done clicked", Toast.LENGTH_SHORT).show();
                 Upvotes upvotes = new Upvotes(0, new HashMap<String, Boolean>());
-                AnswerModel model = new AnswerModel(writable.getText().toString(), upvotes);
+                AnswerModel model = new AnswerModel(writable.getText().toString(), upvotes, user.getUid());
                 databaseReference.push().setValue(model);
                 finish();
 

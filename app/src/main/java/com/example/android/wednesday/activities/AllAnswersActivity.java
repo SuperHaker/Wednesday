@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,12 +31,13 @@ public class AllAnswersActivity extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     AllAnswersAdapter adapter;
     TextView ques;
-    List<AnswerModel> dataSource = new ArrayList<>();
+    Map<String, AnswerModel> dataSource = new LinkedHashMap<>();
     DatabaseReference databaseReference;
     ValueEventListener valueEventListener = null;
     ChildEventListener childEventListener = null;
     Map<String, AnswerModel> map;
     Button writeAnswer;
+    List<String> keyList = new ArrayList<>();
     ProgressBar progressBar;
 
     @Override
@@ -82,18 +84,24 @@ public class AllAnswersActivity extends AppCompatActivity {
 
         if(childEventListener == null){
             progressBar.setVisibility(View.VISIBLE);
+            dataSource.clear();
+            keyList.clear();
             databaseReference.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     AnswerModel model = dataSnapshot.getValue(AnswerModel.class);
                     model.answerId = dataSnapshot.getKey();
-                    dataSource.add(model);
+                    keyList.add(dataSnapshot.getKey());
+                    dataSource.put(dataSnapshot.getKey(), model);
                     adapter.notifyDataSetChanged();
                 }
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                    AnswerModel model = dataSnapshot.getValue(AnswerModel.class);
+                    model.answerId = dataSnapshot.getKey();
+                    dataSource.put(dataSnapshot.getKey(), model);
+//                    adapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -112,7 +120,7 @@ public class AllAnswersActivity extends AppCompatActivity {
                 }
             });
 //            databaseReference.addChildEventListener(childEventListener);
-            adapter = new AllAnswersAdapter(getApplicationContext(), dataSource, databaseReference);
+            adapter = new AllAnswersAdapter(this, dataSource, databaseReference, keyList);
             progressBar.setVisibility(View.GONE);
             recyclerView.setAdapter(adapter);
         }
