@@ -24,8 +24,11 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,6 +81,7 @@ public class AllAnswersAdapter extends RecyclerView.Adapter<AllAnswersAdapter.Al
         if (!map.isEmpty() || map != null) {
            final AnswerModel model = map.get(keyList.get(position));
             holder.ans.setText(model.answer);
+            holder.timeStamp.setText(convertTime(model.time.get("timestamp").toString()));
 
             userReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -121,12 +125,29 @@ public class AllAnswersAdapter extends RecyclerView.Adapter<AllAnswersAdapter.Al
         return map.size();
     }
 
+    public String convertTime(String time){
+        Date date = new Date(Long.parseLong(time));
+        SimpleDateFormat sdf;
+        if((System.currentTimeMillis() - Long.parseLong(time))/3600000 >= 24){
+            sdf = new SimpleDateFormat("dd MMM");
+        }
+//        else if((System.currentTimeMillis() - Long.parseLong(time))/(long)(3600000*24*365) >= 1){
+//            sdf = new SimpleDateFormat("dd|MM|yy");
+//        }
+        else{
+            sdf = new SimpleDateFormat("HH:mm");
+        }
+        // the format of your date
+        sdf.setTimeZone(Calendar.getInstance().getTimeZone()); // give a timezone reference for formating (see comment at the bottom
+        return sdf.format(date);
+    }
+
     class AllAnswersViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView ans;
         ToggleButton upvote;
         ToggleButton downvote;
-        TextView votes, userName;
+        TextView votes, userName, timeStamp;
         CircleImageView userImage;
 
         public AllAnswersViewHolder(View itemView) {
@@ -135,6 +156,7 @@ public class AllAnswersAdapter extends RecyclerView.Adapter<AllAnswersAdapter.Al
             upvote = (ToggleButton) itemView.findViewById(R.id.upvote_answer);
             downvote = (ToggleButton) itemView.findViewById(R.id.downvote_answer);
             votes = (TextView) itemView.findViewById(R.id.votes);
+            timeStamp = (TextView) itemView.findViewById(R.id.timeStamp);
             userImage = (CircleImageView) itemView.findViewById(R.id.user_image);
             userName = (TextView) itemView.findViewById(R.id.user_name);
             upvote.setOnClickListener(this);

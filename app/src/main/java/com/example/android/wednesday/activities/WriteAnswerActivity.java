@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
 import java.util.HashMap;
 
@@ -58,6 +59,7 @@ public class WriteAnswerActivity extends AppCompatActivity {
                 Toast.makeText(WriteAnswerActivity.this, "Done clicked", Toast.LENGTH_SHORT).show();
                 Upvotes upvotes = new Upvotes(0, new HashMap<String, Boolean>());
                 AnswerModel model = new AnswerModel(writable.getText().toString(), upvotes, user.getUid());
+                model.time.put("timestamp", ServerValue.TIMESTAMP);
                 databaseReference.push().setValue(model);
                 finish();
 
