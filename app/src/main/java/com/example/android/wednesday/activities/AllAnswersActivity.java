@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -18,7 +19,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -33,9 +33,7 @@ public class AllAnswersActivity extends AppCompatActivity {
     TextView ques;
     Map<String, AnswerModel> dataSource = new LinkedHashMap<>();
     DatabaseReference databaseReference;
-    ValueEventListener valueEventListener = null;
     ChildEventListener childEventListener = null;
-    Map<String, AnswerModel> map;
     Button writeAnswer;
     List<String> keyList = new ArrayList<>();
     ProgressBar progressBar;
@@ -49,6 +47,7 @@ public class AllAnswersActivity extends AppCompatActivity {
         final String s2 = intent.getStringExtra("quesId");
         databaseReference = FirebaseDatabase.getInstance().getReference().child("asknow").child(s1)
                 .child(s2).child("answers");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ques = (TextView) findViewById(R.id.question);
         writeAnswer = (Button) findViewById(R.id.write_answer);
         progressBar = (ProgressBar) findViewById(R.id.progress);
@@ -69,9 +68,25 @@ public class AllAnswersActivity extends AppCompatActivity {
         });
 //        adapter = new AllAnswersAdapter(getApplicationContext());
 //        recyclerView.setAdapter(adapter);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if(childEventListener == null){
             attachDatabaseReadListener();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

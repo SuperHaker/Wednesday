@@ -1,9 +1,11 @@
 package com.example.android.wednesday.fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -18,6 +20,7 @@ import com.example.android.wednesday.R;
 import com.example.android.wednesday.adapters.AskNowAdapter;
 import com.example.android.wednesday.models.AnswerModel;
 import com.example.android.wednesday.models.AskQuestionModel;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,6 +45,7 @@ public class AskNowFragment extends Fragment {
     ValueEventListener valueEventListener;
     List<AskQuestionModel> dataSource;
     ProgressBar progressBar;
+    ChildEventListener childEventListener;
 
     public static final List<String> list = new ArrayList<String>();
     public AskNowFragment() {
@@ -60,9 +64,13 @@ public class AskNowFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.AskNowTheme);
+
+        // clone the inflater using the ContextThemeWrapper
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
 
 
-        View v =  inflater.inflate(R.layout.fragment_ask_now, container, false);
+        View v =  localInflater.inflate(R.layout.fragment_ask_now, container, false);
         progressBar = (ProgressBar) v.findViewById(R.id.progress);
                 recyclerView = (RecyclerView) v.findViewById(R.id.ask_now_list);
         recyclerView.setHasFixedSize(true);
@@ -136,6 +144,39 @@ public class AskNowFragment extends Fragment {
     private void attachDatabaseReadListener() {
         if (valueEventListener == null) {
             progressBar.setVisibility(View.VISIBLE);
+
+//            childEventListener = new ChildEventListener() {
+//                @Override
+//                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                    AskQuestionModel model = dataSnapshot.getValue(AskQuestionModel.class);
+//                    model.userId = childDataSnapshot.getKey();
+//                    model.quesId = ds.getKey();
+//                    dataSource.add(model);
+//
+//                }
+//
+//                @Override
+//                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//                }
+//
+//                @Override
+//                public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//                }
+//
+//                @Override
+//                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            };
+
+
             valueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

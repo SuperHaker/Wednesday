@@ -8,9 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.android.wednesday.R;
 import com.example.android.wednesday.fragments.MainAskNowFragment;
 import com.example.android.wednesday.fragments.MainEventsFragment;
-import com.example.android.wednesday.fragments.MainPlanFragment;
 import com.example.android.wednesday.fragments.MainProfileFragment;
-import com.example.android.wednesday.fragments.MainTravelFragment;
 import com.ncapdevi.fragnav.FragNavController;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabReselectListener;
@@ -23,8 +21,7 @@ public class MainActivity extends AppCompatActivity implements FragNavController
     private final int TAB_FIRST = FragNavController.TAB1;
     private final int TAB_SECOND = FragNavController.TAB2;
     private final int TAB_THIRD = FragNavController.TAB3;
-    private final int TAB_FOURTH = FragNavController.TAB4;
-    private final int TAB_FIFTH = FragNavController.TAB5;
+
     private FragNavController mNavController;
 
 
@@ -41,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements FragNavController
 
 
         mNavController =
-                new FragNavController(savedInstanceState, getSupportFragmentManager(), R.id.container,this,5, TAB_FIRST);
+                new FragNavController(savedInstanceState, getSupportFragmentManager(), R.id.container,this,3, TAB_FIRST);
         mNavController.setTransactionListener(this);
 
 
@@ -54,17 +51,11 @@ public class MainActivity extends AppCompatActivity implements FragNavController
                     case R.id.tab_events:
                         mNavController.switchTab(TAB_FIRST);
                         break;
-                    case R.id.tab_travel:
+                    case R.id.tab_ask_now:
                         mNavController.switchTab(TAB_SECOND);
                         break;
-                    case R.id.tab_plan:
-                        mNavController.switchTab(TAB_THIRD);
-                        break;
-                    case R.id.tab_ask_now:
-                        mNavController.switchTab(TAB_FOURTH);
-                        break;
                     case R.id.tab_profile:
-                        mNavController.switchTab(TAB_FIFTH);
+                        mNavController.switchTab(TAB_THIRD);
                         break;
 
                 }
@@ -97,12 +88,8 @@ public class MainActivity extends AppCompatActivity implements FragNavController
             case TAB_FIRST:
                 return new MainEventsFragment();
             case TAB_SECOND:
-                return new MainTravelFragment();
-            case TAB_THIRD:
-                return new MainPlanFragment();
-            case TAB_FOURTH:
                 return new MainAskNowFragment();
-            case TAB_FIFTH:
+            case TAB_THIRD:
                 return new MainProfileFragment();
         }
         throw new IllegalStateException("Need to send an index that we know");

@@ -156,7 +156,7 @@ public class AllAnswersAdapter extends RecyclerView.Adapter<AllAnswersAdapter.Al
             upvote = (ToggleButton) itemView.findViewById(R.id.upvote_answer);
             downvote = (ToggleButton) itemView.findViewById(R.id.downvote_answer);
             votes = (TextView) itemView.findViewById(R.id.votes);
-            timeStamp = (TextView) itemView.findViewById(R.id.timeStamp);
+            timeStamp = (TextView) itemView.findViewById(R.id.timestamp);
             userImage = (CircleImageView) itemView.findViewById(R.id.user_image);
             userName = (TextView) itemView.findViewById(R.id.user_name);
             upvote.setOnClickListener(this);

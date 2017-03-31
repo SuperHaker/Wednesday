@@ -93,7 +93,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/timeStamp"
+                    android:id="@+id/timestamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Time"/>
@@ -107,7 +107,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="2dp"
                 android:text="Answer here"
-                android:textColor="#9e9e9e" />
+                android:textColor="@android:color/black" />
         </LinearLayout>
 
 

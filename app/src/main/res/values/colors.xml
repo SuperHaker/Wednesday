@@ -5,5 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="secondaryText">#cfd8dc</color>
     <color name="orange500">#F44336</color>
+    <color name="blue50">#E3F2FD</color>
 
 </resources>
