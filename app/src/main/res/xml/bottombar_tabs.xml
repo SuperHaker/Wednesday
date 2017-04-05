@@ -9,7 +9,7 @@
         id="@+id/tab_ask_now"
         title="Ask Now"
         icon = "@drawable/ic_comment_question_outline_black_24dp"
-        barColorWhenSelected="#FF5722"/>
+       />
 
     <tab
         id="@+id/tab_profile"

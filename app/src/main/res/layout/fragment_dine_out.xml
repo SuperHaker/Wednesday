@@ -23,12 +23,14 @@
             android:textColor="#000"
             android:layout_marginLeft="8dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="4dp"
+            android:visibility="gone"/>
         <com.lsjwzh.widget.recyclerviewpager.LoopRecyclerViewPager
             android:id="@+id/featured_picks_activities"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
+            android:visibility="gone"
             />
 
         <TextView

@@ -97,14 +97,19 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     User user =  dataSnapshot.child(model.answererUid).getValue(User.class);
                     String myPhotoUrl = dataSnapshot.child(myUser.getUid()).child("userPhoto").getValue(String.class);
-                    Glide.with(context)
-                            .load(user.userPhoto)
-                            .into(holder.userImage);
-                    holder.userName.setText(user.username);
+                    if(user.userPhoto != null) {
+                        Glide.with(context)
+                                .load(user.userPhoto)
+                                .into(holder.userImage);
+                        holder.userName.setText(user.username);
+                    }
 
-                    Glide.with(context)
-                            .load(myPhotoUrl)
-                            .into(holder.myUser);
+                    if(myPhotoUrl != null) {
+
+                        Glide.with(context)
+                                .load(myPhotoUrl)
+                                .into(holder.myUser);
+                    }
 
                 }
 

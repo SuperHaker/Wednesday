@@ -228,7 +228,7 @@ public class ActivitiesTabFragment extends Fragment {
                     for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
                         CategoryModel model = childDataSnapshot.getValue(CategoryModel.class);
                         categorySource.add(model);
-                        gridAdapter.notifyDataSetChanged(); //gives the value for given keyname
+                        gridAdapter.notifyDataSetChanged();
 
                     }
                     progressBar.setVisibility(View.INVISIBLE);
@@ -241,7 +241,7 @@ public class ActivitiesTabFragment extends Fragment {
                 }
 
             };
-            mDatabaseReference.addValueEventListener(valueEventListener);
+            mDatabaseReference.addListenerForSingleValueEvent(valueEventListener);
 
         }
     }

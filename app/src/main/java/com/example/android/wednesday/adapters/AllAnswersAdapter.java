@@ -87,10 +87,13 @@ public class AllAnswersAdapter extends RecyclerView.Adapter<AllAnswersAdapter.Al
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     User user =  dataSnapshot.child(model.answererUid).getValue(User.class);
-                    Glide.with(context)
-                            .load(user.userPhoto)
-                            .into(holder.userImage);
-                    holder.userName.setText(user.username);
+                    if(user.userPhoto != null) {
+                        Glide.with(context)
+                                .load(user.userPhoto)
+                                .into(holder.userImage);
+                    }
+                        holder.userName.setText(user.username);
+
                 }
 
                 @Override
