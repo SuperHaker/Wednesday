@@ -10,13 +10,16 @@
     android:layout_height="?android:attr/actionBarSize"
     android:drawableLeft="@drawable/ic_magnify_white_24dp"
     android:hint=" Ask Now"
+    android:inputType="textCapSentences"
+    android:overlapAnchor="false"
     android:background="#000"
     android:paddingLeft="8dp"
     />
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="wrap_content"

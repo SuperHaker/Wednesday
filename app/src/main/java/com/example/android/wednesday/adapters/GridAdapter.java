@@ -58,7 +58,10 @@ public class GridAdapter extends RecyclerView.Adapter {
          CategoryViewHolder viewHolder = (CategoryViewHolder) holder;
             CategoryModel currentCard = dataSource.get(position);
             viewHolder.categoryName.setText(currentCard.categoryName);
-            Glide.with(context).load(currentCard.categoryPhoto).into(viewHolder.categoryPhoto);
+            Glide.with(context)
+                    .load(currentCard.categoryPhoto)
+                    .placeholder(R.drawable.placeholder)
+                    .into(viewHolder.categoryPhoto);
 
     }
 

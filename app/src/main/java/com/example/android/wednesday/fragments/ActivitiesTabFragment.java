@@ -220,7 +220,6 @@ public class ActivitiesTabFragment extends Fragment {
 
     private void attachDatabaseReadListener(){
         if(valueEventListener == null) {
-            progressBar.setVisibility(View.VISIBLE);
             valueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

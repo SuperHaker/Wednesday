@@ -45,8 +45,8 @@ public class AskQuestionActivity extends AppCompatActivity {
                 String[] ar = questionTags.getText().toString().split("\\s*,\\s*");
                 List<String> list = Arrays.asList(ar);
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                AskQuestionModel askQuestionModel = new AskQuestionModel(askedQuestion.getText().toString(), list);
-                databaseReference.child(user.getUid()).push().setValue(askQuestionModel);
+                AskQuestionModel askQuestionModel = new AskQuestionModel(askedQuestion.getText().toString(), list, user.getUid());
+                databaseReference.push().setValue(askQuestionModel);
                 Toast.makeText(AskQuestionActivity.this, "Question Added", Toast.LENGTH_SHORT).show();
                 finish();
             }

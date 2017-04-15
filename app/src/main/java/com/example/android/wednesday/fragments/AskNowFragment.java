@@ -2,6 +2,7 @@ package com.example.android.wednesday.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,11 +14,15 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 
 import com.example.android.wednesday.R;
+import com.example.android.wednesday.activities.AllAnswersActivity;
+import com.example.android.wednesday.activities.AskQuestionActivity;
 import com.example.android.wednesday.adapters.AskNowAdapter;
+import com.example.android.wednesday.adapters.AskNowArrayAdapter;
 import com.example.android.wednesday.models.AnswerModel;
 import com.example.android.wednesday.models.AskQuestionModel;
 import com.google.firebase.database.ChildEventListener;
@@ -26,6 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -46,8 +52,9 @@ public class AskNowFragment extends Fragment {
     List<AskQuestionModel> dataSource;
     ProgressBar progressBar;
     ChildEventListener childEventListener;
+    AskNowArrayAdapter arrayAdapter;
 
-    public static final List<String> list = new ArrayList<String>();
+    final List<AskQuestionModel> list = new ArrayList<>();
     public AskNowFragment() {
         // Required empty public constructor
     }
@@ -78,7 +85,6 @@ public class AskNowFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
 
         editText = (AutoCompleteTextView) v.findViewById(R.id.ask_now_edittext);
-
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -87,45 +93,83 @@ public class AskNowFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String queryText = editText.getText().toString();
+                if(!queryText.isEmpty()){
+
+                    Query query = databaseReference.orderByChild("question")
+                            .startAt(queryText)
+                            .endAt(queryText + "\uf8ff");
+                    query.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            list.clear();
+                            if(dataSnapshot.exists()) {
+                                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                    AskQuestionModel model = ds.getValue(AskQuestionModel.class);
+                                    model.quesId = ds.getKey();
+                                    list.add(model);
+                                }
+                            }
+                            list.add(new AskQuestionModel("Add your question", null, null));
+                            arrayAdapter = new AskNowArrayAdapter(getContext(), R.layout.dropdown_item, list);
+                            editText.setAdapter(arrayAdapter);
+                            editText.showDropDown();
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+
+                    });
+
+                }
+
 
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String query = editable.toString();
-                if(!query.isEmpty()){
-                    
-                }
+
             }
         });
 
 
-//        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.dropdown_item, list);
-//        editText.setAdapter(adapter);
 
-//        autoCompleteTextView.setOnTouchListener(new View.OnTouchListener() {
+//        editText.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
 //            public boolean onTouch(View view, MotionEvent motionEvent) {
 //                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-//                    autoCompleteTextView.showDropDown();
+//                    editText.showDropDown();
 //                }
 //                return false;
 //            }
 //        });
 
-//        autoCompleteTextView.setThreshold(0);
-//        editText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                if(adapter.getItem(i).equals("Add your question")) {
-//                    autoCompleteTextView.setText("");
-//                    Intent intent  = new Intent(getContext(), AskQuestionActivity.class);
-//                    intent.putExtra("question", autoCompleteTextView.getText().toString());
-//                    startActivity(intent);
-//                }
-//
-//            }
-//        });
+        editText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(((AskQuestionModel)adapterView.getItemAtPosition(i)).question
+                        .equals("Add your question")) {
+                    editText.setText("");
+                    Intent intent  = new Intent(getContext(), AskQuestionActivity.class);
+                    intent.putExtra("question", editText.getText().toString());
+                    startActivity(intent);
+                }
+                else{
+                    editText.setText("");
+                    String quesid = list.get(i).quesId;
+                    Intent intent  = new Intent(getContext(), AllAnswersActivity.class);
+                    intent.putExtra("userId", list.get(i).asker);
+                    intent.putExtra("quesId", quesid);
+                    intent.putExtra("question", list.get(i).question);
+                    startActivity(intent);
+                }
+
+            }
+        });
 
         if(valueEventListener == null) {
             attachDatabaseReadListener();
@@ -183,10 +227,10 @@ public class AskNowFragment extends Fragment {
                     dataSource.clear();
                     list.clear();
                     for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                        for (DataSnapshot ds : childDataSnapshot.getChildren()) {
-                            AskQuestionModel model = ds.getValue(AskQuestionModel.class);
+
+                            AskQuestionModel model = childDataSnapshot.getValue(AskQuestionModel.class);
                             GenericTypeIndicator<Map<String, AnswerModel>> t = new GenericTypeIndicator<Map<String, AnswerModel>>() {};
-                            Map<String, AnswerModel> map =  ds.child("answers").getValue(t);
+                            Map<String, AnswerModel> map =  childDataSnapshot.child("answers").getValue(t);
                             if(map != null) {
                                 Collection<AnswerModel> collection = map.values();
 //                                List<AnswerModel> answerModel = new ArrayList<>();
@@ -194,16 +238,11 @@ public class AskNowFragment extends Fragment {
 //                                model.answersList = answerModel;
                                 model.map = map;
                             }
-                                model.userId = childDataSnapshot.getKey();
-                            model.quesId = ds.getKey();
+                            model.quesId = childDataSnapshot.getKey();
                             dataSource.add(model);
-                            list.add(model.question);
-
-
                             adapter.notifyDataSetChanged();
-                        }
+
                     }
-                    list.add("Add your question");
                     progressBar.setVisibility(View.GONE);
 
                 }
@@ -211,11 +250,12 @@ public class AskNowFragment extends Fragment {
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
+
                 }
 
             };
             databaseReference.addValueEventListener(valueEventListener);
-            adapter = new AskNowAdapter(getContext(), dataSource);
+            adapter = new AskNowAdapter(getContext(), dataSource, databaseReference);
             recyclerView.setAdapter(adapter);
         }
     }

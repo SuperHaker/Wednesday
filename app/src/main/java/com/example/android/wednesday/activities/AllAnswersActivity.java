@@ -45,7 +45,7 @@ public class AllAnswersActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final String s1 =  intent.getStringExtra("userId");
         final String s2 = intent.getStringExtra("quesId");
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("asknow").child(s1)
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("asknow")
                 .child(s2).child("answers");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ques = (TextView) findViewById(R.id.question);

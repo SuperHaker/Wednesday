@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.example.android.wednesday.R;
@@ -35,6 +36,8 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.example.android.wednesday.R.drawable.user;
+
 /**
  * Created by hp pc on 3/6/2017.
  */
@@ -48,16 +51,17 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
     String key;
     DatabaseReference userReference;
     FirebaseUser  myUser;
+    DatabaseReference databaseReference;
 
 
-
-    public AskNowAdapter(Context context, List<AskQuestionModel> list){
+    public AskNowAdapter(Context context, List<AskQuestionModel> list, DatabaseReference databaseReference){
         inflater = LayoutInflater.from(context);
         this.context = context;
         this.list = list;
         userReference = FirebaseDatabase.getInstance().getReference().child("users");
         myUser = FirebaseAuth.getInstance().getCurrentUser();
 //        setHasStableIds(true);
+        this.databaseReference = databaseReference;
     }
 
 //    @Override
@@ -69,20 +73,14 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
     public AskNowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = inflater.inflate(R.layout.ask_now_layout, parent, false);
-
-//        tv.setBackgroundColor(context.getResources().getColor(R.color.orange500));
-
-//        chip.changeBackgroundColor(R.color.orange500);
         return new AskNowViewHolder(view, context);
     }
 
     @Override
     public void onBindViewHolder(final AskNowViewHolder holder, int position) {
-//        holder.addExtraTextView();
         holder.answererInfo.setVisibility(View.GONE);
-//        holder.chip.setChipText("Tag");
         holder.tagHolder.removeAllViews();
-        holder.myUser.setImageResource(R.drawable.user);
+        holder.myUser.setImageResource(user);
         AskQuestionModel currentCard = list.get(position);
 //        Collection<AnswerModel> collections = currentCard.map.values();
 //        List<AnswerModel> list = new ArrayList<>();
@@ -166,6 +164,7 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
     class AskNowViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         LinearLayout tagHolder;
         Context context;
+        ToggleButton upvote, downvote;
         TextView topAnswer, votes, timestamp, userName;
         View v;
         CircleImageView userImage, myUser;
@@ -173,7 +172,7 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
         LayoutInflater vi;
         View answererInfo;
         TextView question;
-        View upvoter, downvoter, seeMoreAnswers;
+        View seeMoreAnswers;
 
          public AskNowViewHolder(View itemView, Context context){
              super(itemView);
@@ -189,11 +188,11 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
              v.setOnClickListener(this);
              answererInfo = itemView.findViewById(R.id.first_answer_info);
              timestamp = (TextView) itemView.findViewById(R.id.timestamp);
-             upvoter = itemView.findViewById(R.id.upvote_answer);
-             downvoter = itemView.findViewById(R.id.downvote_answer);
+             upvote = (ToggleButton) itemView.findViewById(R.id.upvote_answer);
+             downvote = (ToggleButton) itemView.findViewById(R.id.downvote_answer);
              votes = (TextView) itemView.findViewById(R.id.votes);
-             upvoter.setOnClickListener(this);
-             downvoter.setOnClickListener(this);
+             upvote.setOnClickListener(this);
+             downvote.setOnClickListener(this);
              seeMoreAnswers = itemView.findViewById(R.id.see_more_answers);
              seeMoreAnswers.setOnClickListener(this);
 
@@ -206,39 +205,116 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
                 Intent intent = new Intent(context, WriteAnswerActivity.class);
                 AskQuestionModel model = list.get(getAdapterPosition());
                 intent.putExtra("question", question.getText().toString());
-                intent.putExtra("userId", model.userId);
+                intent.putExtra("userId", model.asker);
                 intent.putExtra("quesId", model.quesId);
                 context.startActivity(intent);
-            }
-
-            if(view == upvoter){
-
             }
 
             if(view == seeMoreAnswers){
                 Intent intent = new Intent(context, AllAnswersActivity.class);
                 intent.putExtra("question", question.getText().toString());
                 AskQuestionModel model = list.get(getAdapterPosition());
-                intent.putExtra("userId", model.userId);
+                intent.putExtra("userId", model.asker);
                 intent.putExtra("quesId", model.quesId);
                 context.startActivity(intent);
             }
-        }
 
-        //        public void addExtraTextView() {
-//            v = vi.inflate(R.layout.question_tag, null);
-//            chip = (Chip) v.findViewById(chip);
-//            chip.setChipText("Tag");
-//            ((ViewGroup)tagHolder).addView(chip);
-//            chip.setChipText("Tag");
-//        }
+
+            if(view == upvote || view == downvote){
+
+//                databaseReference.child(map.get(keyList.get(getAdapterPosition()))
+//                        .answerId).child("upvotes").child("number")
+//                        .runTransaction(new Transaction.Handler() {
+//                            String message = "";
+//                            Long value;
 //
-        public void removeExtraTextView() {
-            ((ViewGroup)tagHolder).removeView(chip);
+//                            @Override
+//                            public Transaction.Result doTransaction(MutableData mutableData) {
+//                                if (mutableData.getValue() == null) {
+//                                    return Transaction.success(mutableData);
+//                                }
+//                                value = (Long) mutableData.getValue();
+//
+//                                if (view == upvote) {
+//                                    if (upvote.isChecked()) {
+//                                        value += 1;
+//
+//                                        message = "Upvoted";
+//                                        if(downvote.isChecked()) {
+//                                            ((Activity)context).runOnUiThread(new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    downvote.setChecked(false);
+//
+//                                                }
+//                                            });
+//                                            value++;
+//                                        }
+//
+//
+//                                        databaseReference.child(map.get(keyList.get(getAdapterPosition()))
+//                                                .answerId).child("upvotes")
+//                                                .child("listOfPeople").child(user.getUid()).setValue(true);
+//                                        mutableData.setValue(value);
+//
+//
+//                                    } else if (!upvote.isChecked()) {
+//                                        value -= 1;
+//                                        message = "Upvote removed";
+//
+//                                        databaseReference.child(map.get(keyList.get(getAdapterPosition()))
+//                                                .answerId).child("upvotes")
+//                                                .child("listOfPeople").child(user.getUid()).setValue(null);
+//                                        mutableData.setValue(value);
+//
+//                                    }
+//                                }
+//
+//                                if (view == downvote) {
+//                                    if (downvote.isChecked()) {
+//                                        value -= 1;
+//                                        message = "Downvoted";
+//
+//                                        if(upvote.isChecked()) {
+//                                            ((Activity)context).runOnUiThread(new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    upvote.setChecked(false);
+//                                                }});
+//                                            value--;
+//                                        }
+//                                        databaseReference.child(map.get(keyList.get(getAdapterPosition()))
+//                                                .answerId).child("upvotes")
+//                                                .child("listOfPeople").child(user.getUid()).setValue(false);
+//                                        mutableData.setValue(value);
+//
+//                                    } else if (!downvote.isChecked()) {
+//                                        value += 1;
+//                                        message = "Downvote removed";
+//
+//                                        mutableData.setValue(value);
+//                                        databaseReference.child(map.get(keyList.get(getAdapterPosition()))
+//                                                .answerId).child("upvotes")
+//                                                .child("listOfPeople").child(user.getUid()).setValue(null);
+//                                        mutableData.setValue(value);
+//
+//
+//                                    }
+//                                }
+//
+//                                return Transaction.success(mutableData);
+//                            }
+//
+//                            @Override
+//                            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+//                                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+//                                votes.setText(value.toString());
+//                            }
+//                        });
+
+            }
 
         }
-
-
 
      }
 
@@ -248,17 +324,11 @@ public class AskNowAdapter extends RecyclerView.Adapter<AskNowAdapter.AskNowView
          tv.setLayoutParams(new ViewGroup.LayoutParams(
                  ViewGroup.LayoutParams.WRAP_CONTENT,
                  ViewGroup.LayoutParams.WRAP_CONTENT));
-
-//        LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View v = vi.inflate(R.layout.question_tag, null);
-//        Chip chip = (Chip) v.findViewById(R.id.chip);
-//        chip.setChipText("Tag");
          ((ViewGroup) ll).addView(tv);
          tv.setText(text);
          tv.setTextColor(context.getResources().getColor(R.color.colorPrimary));
          tv.setBackground(drawable);
          ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) tv.getLayoutParams();
-
          layoutParams.setMargins(8,5,5,8);
      }
 

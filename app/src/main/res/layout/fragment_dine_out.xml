@@ -82,17 +82,16 @@
                     />
 
                 <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="100dp">
 
                     <ProgressBar
                         android:id="@+id/load_categories"
-                        style="?android:attr/progressBarStyleLarge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:visibility="gone" />
-
+                        android:layout_gravity="center_horizontal"
+                        />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/categories_dineout"

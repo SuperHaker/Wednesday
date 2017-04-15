@@ -204,7 +204,6 @@ public class EventsTabFragment extends Fragment implements ViewPager.OnPageChang
 
     private void attachDatabaseReadListener() {
         if (valueEventListener == null) {
-            progressBar.setVisibility(View.VISIBLE);
             valueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

@@ -12,7 +12,7 @@ public class AskQuestionModel {
 
     public String question;
     public List<String> tags;
-    public String userId;
+    public String asker;
     public String quesId;
 //    public List<AnswerModel> answersList;
     public Map<String, AnswerModel> map = new LinkedHashMap<>();
@@ -23,9 +23,10 @@ public class AskQuestionModel {
     }
 
 
-    public AskQuestionModel(String question, List<String> tags){
+    public AskQuestionModel(String question, List<String> tags, String asker){
         this.question = question;
         this.tags = tags;
+        this.asker = asker;
 
     }
 

@@ -34,6 +34,7 @@ public class WriteAnswerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_answer);
         writable = (EditText) findViewById(R.id.writable);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         String question = intent.getStringExtra("question");
         String userId = intent.getStringExtra("userId");
